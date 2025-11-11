@@ -1,6 +1,339 @@
+{% doc %}
+  @prompt
+    I WANT TO ADD a section in the footer that has 3 columns 1st one has texts , second and 3rd columns have the links to different pages 
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-footer-columns-{{ ai_gen_id }} {
+    padding: {{ block.settings.padding_top }}px 0 {{ block.settings.padding_bottom }}px;
+    background-color: {{ block.settings.background_color }};
+  }
+
+  .ai-footer-columns-container-{{ ai_gen_id }} {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  .ai-footer-columns-grid-{{ ai_gen_id }} {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: {{ block.settings.column_gap }}px;
+  }
+
+  .ai-footer-column-{{ ai_gen_id }} {
+    display: flex;
+    flex-direction: column;
+    gap: {{ block.settings.item_spacing }}px;
+  }
+
+  .ai-footer-column-heading-{{ ai_gen_id }} {
+    color: {{ block.settings.heading_color }};
+    font-size: {{ block.settings.heading_size }}px;
+    font-weight: 600;
+    margin: 0 0 {{ block.settings.heading_spacing }}px;
+  }
+
+  .ai-footer-column-text-{{ ai_gen_id }} {
+    color: {{ block.settings.text_color }};
+    font-size: {{ block.settings.text_size }}px;
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  .ai-footer-link-{{ ai_gen_id }} {
+    color: {{ block.settings.link_color }};
+    font-size: {{ block.settings.link_size }}px;
+    text-decoration: none;
+    transition: color 0.3s ease;
+    display: block;
+  }
+
+  .ai-footer-link-{{ ai_gen_id }}:hover {
+    color: {{ block.settings.link_hover_color }};
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-footer-columns-grid-{{ ai_gen_id }} {
+      grid-template-columns: 1fr;
+      gap: {{ block.settings.column_gap | times: 1.5 }}px;
+    }
+  }
+
+  @media screen and (min-width: 750px) and (max-width: 989px) {
+    .ai-footer-columns-grid-{{ ai_gen_id }} {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .ai-footer-column-{{ ai_gen_id }}:first-child {
+      grid-column: 1 / -1;
+    }
+  }
+{% endstyle %}
+
+<div class="ai-footer-columns-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-footer-columns-container-{{ ai_gen_id }}">
+    <div class="ai-footer-columns-grid-{{ ai_gen_id }}">
+      <div class="ai-footer-column-{{ ai_gen_id }}">
+        {% if block.settings.column_1_heading != blank %}
+          <h3 class="ai-footer-column-heading-{{ ai_gen_id }}">{{ block.settings.column_1_heading }}</h3>
+        {% endif %}
+        {% if block.settings.column_1_text != blank %}
+          <div class="ai-footer-column-text-{{ ai_gen_id }}">{{ block.settings.column_1_text }}</div>
+        {% endif %}
+      </div>
+
+      <div class="ai-footer-column-{{ ai_gen_id }}">
+        {% if block.settings.column_2_heading != blank %}
+          <h3 class="ai-footer-column-heading-{{ ai_gen_id }}">{{ block.settings.column_2_heading }}</h3>
+        {% endif %}
+        {% for i in (1..5) %}
+          {% liquid
+            assign page_key = 'column_2_page_' | append: i
+            assign page = block.settings[page_key]
+          %}
+          {% if page != blank %}
+            <a href="{{ page.url }}" class="ai-footer-link-{{ ai_gen_id }}">{{ page.title }}</a>
+          {% endif %}
+        {% endfor %}
+      </div>
+
+      <div class="ai-footer-column-{{ ai_gen_id }}">
+        {% if block.settings.column_3_heading != blank %}
+          <h3 class="ai-footer-column-heading-{{ ai_gen_id }}">{{ block.settings.column_3_heading }}</h3>
+        {% endif %}
+        {% for i in (1..5) %}
+          {% liquid
+            assign page_key = 'column_3_page_' | append: i
+            assign page = block.settings[page_key]
+          %}
+          {% if page != blank %}
+            <a href="{{ page.url }}" class="ai-footer-link-{{ ai_gen_id }}">{{ page.title }}</a>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+
 {% schema %}
- {
-   "name": "AI_Block",
-   "tag": "shopify-ai-generated-block"
- }
+{
+  "name": "Footer columns",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Column 1"
+    },
+    {
+      "type": "text",
+      "id": "column_1_heading",
+      "label": "Heading",
+      "default": "About us"
+    },
+    {
+      "type": "richtext",
+      "id": "column_1_text",
+      "label": "Text",
+      "default": "<p>Share information about your brand with your customers. Describe a product, make announcements, or welcome customers to your store.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Column 2"
+    },
+    {
+      "type": "text",
+      "id": "column_2_heading",
+      "label": "Heading",
+      "default": "Quick links"
+    },
+    {
+      "type": "page",
+      "id": "column_2_page_1",
+      "label": "Page 1"
+    },
+    {
+      "type": "page",
+      "id": "column_2_page_2",
+      "label": "Page 2"
+    },
+    {
+      "type": "page",
+      "id": "column_2_page_3",
+      "label": "Page 3"
+    },
+    {
+      "type": "page",
+      "id": "column_2_page_4",
+      "label": "Page 4"
+    },
+    {
+      "type": "page",
+      "id": "column_2_page_5",
+      "label": "Page 5"
+    },
+    {
+      "type": "header",
+      "content": "Column 3"
+    },
+    {
+      "type": "text",
+      "id": "column_3_heading",
+      "label": "Heading",
+      "default": "Information"
+    },
+    {
+      "type": "page",
+      "id": "column_3_page_1",
+      "label": "Page 1"
+    },
+    {
+      "type": "page",
+      "id": "column_3_page_2",
+      "label": "Page 2"
+    },
+    {
+      "type": "page",
+      "id": "column_3_page_3",
+      "label": "Page 3"
+    },
+    {
+      "type": "page",
+      "id": "column_3_page_4",
+      "label": "Page 4"
+    },
+    {
+      "type": "page",
+      "id": "column_3_page_5",
+      "label": "Page 5"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#f5f5f5"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "link_color",
+      "label": "Link",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "link_hover_color",
+      "label": "Link hover",
+      "default": "#333333"
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "min": 12,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading size",
+      "default": 18
+    },
+    {
+      "type": "range",
+      "id": "text_size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Text size",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "link_size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Link size",
+      "default": 14
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "column_gap",
+      "min": 20,
+      "max": 80,
+      "step": 5,
+      "unit": "px",
+      "label": "Column gap",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "heading_spacing",
+      "min": 5,
+      "max": 30,
+      "step": 5,
+      "unit": "px",
+      "label": "Heading spacing",
+      "default": 15
+    },
+    {
+      "type": "range",
+      "id": "item_spacing",
+      "min": 5,
+      "max": 25,
+      "step": 5,
+      "unit": "px",
+      "label": "Item spacing",
+      "default": 10
+    }
+  ],
+  "presets": [
+    {
+      "name": "Footer columns"
+    }
+  ]
+}
 {% endschema %}
