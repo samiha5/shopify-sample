@@ -17,7 +17,7 @@
         "announcement_BxgCk9": {
           "type": "_announcement",
           "settings": {
-            "text": "Welcome to our store",
+            "text": "<strong>🎉 11.11 SALE IS LIVE! Get Extra 11% OFF on Selective Products – For 24 Hours Only! 🛍️</strong>",
             "link": "",
             "font": "var(--font-subheading--family)",
             "font_size": "0.75rem",
