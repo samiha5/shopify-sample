@@ -11,6 +11,36 @@
   "type": "header",
   "name": "Header",
   "sections": {
+    "header_announcements_pGy4ED": {
+      "type": "header-announcements",
+      "blocks": {
+        "announcement_xMWCwj": {
+          "type": "_announcement",
+          "settings": {
+            "text": "<strong>Free Gift on purchases above Rs 3999</strong>",
+            "link": "",
+            "font": "var(--font-body--family)",
+            "font_size": "1rem",
+            "weight": "",
+            "letter_spacing": "normal",
+            "case": "none"
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "announcement_xMWCwj"
+      ],
+      "name": "t:names.announcement_bar",
+      "settings": {
+        "speed": 5,
+        "section_width": "page-width",
+        "color_scheme": "scheme-5",
+        "divider_width": 0,
+        "padding-block-start": 15,
+        "padding-block-end": 15
+      }
+    },
     "header_announcements_9jGBFp": {
       "type": "header-announcements",
       "blocks": {
@@ -112,6 +142,7 @@
     }
   },
   "order": [
+    "header_announcements_pGy4ED",
     "header_announcements_9jGBFp",
     "header_section"
   ]
