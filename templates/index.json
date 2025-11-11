@@ -371,6 +371,35 @@
     },
     "17628597425e79e558": {
       "type": "_blocks",
+      "blocks": {
+        "ai_gen_block_b92ac9a_yzM9yh": {
+          "type": "ai_gen_block_b92ac9a",
+          "name": "Text block",
+          "settings": {
+            "heading": "WHY MISSROSE ?",
+            "text": "",
+            "content_width": 400,
+            "text_alignment": "center",
+            "padding_top": 50,
+            "padding_bottom": 50,
+            "padding_horizontal": 20,
+            "padding_top_mobile": 30,
+            "padding_bottom_mobile": 30,
+            "padding_horizontal_mobile": 15,
+            "background_color": "#ffffff",
+            "heading_color": "#000000",
+            "text_color": "#000000",
+            "heading_size": 32,
+            "heading_spacing": 16,
+            "text_size": 16,
+            "line_height": 1.5
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "ai_gen_block_b92ac9a_yzM9yh"
+      ],
       "settings": {
         "content_direction": "column",
         "vertical_on_mobile": true,
