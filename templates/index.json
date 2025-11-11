@@ -389,7 +389,7 @@
             "background_color": "#ffffff",
             "heading_color": "#000000",
             "text_color": "#000000",
-            "heading_size": 32,
+            "heading_size": 26,
             "heading_spacing": 16,
             "text_size": 16,
             "line_height": 1.5
@@ -427,12 +427,134 @@
         "padding-block-start": 0,
         "padding-block-end": 0
       }
+    },
+    "17628602738b153990": {
+      "type": "_blocks",
+      "blocks": {
+        "ai_gen_block_04da80c_UrLaig": {
+          "type": "ai_gen_block_04da80c",
+          "settings": {
+            "layout": "image_left",
+            "mobile_layout": "text_first",
+            "vertical_alignment": "center",
+            "column_gap": 40,
+            "heading": "STAND OUT IN THE CROWD",
+            "description": "<p>Take the lead with JUST-RELEASED New makeup from MISS ROSE Professional Makeup.</p>",
+            "text_padding": 20,
+            "button_label": "Learn more",
+            "button_link": "",
+            "image": "shopify://shop_images/img_1.webp",
+            "image_border_radius": 8,
+            "background_color": "#ffffff",
+            "heading_color": "#000000",
+            "text_color": "#000000",
+            "button_background": "#000000",
+            "button_text_color": "#ffffff",
+            "button_hover_background": "#333333",
+            "heading_size": 32,
+            "text_size": 16,
+            "padding_top": 60,
+            "padding_bottom": 60,
+            "button_border_radius": 8
+          },
+          "blocks": {}
+        },
+        "ai_gen_block_04da80c_GkU6AP": {
+          "type": "ai_gen_block_04da80c",
+          "settings": {
+            "layout": "image_left",
+            "mobile_layout": "text_first",
+            "vertical_alignment": "center",
+            "column_gap": 40,
+            "heading": "STAND OUT IN THE CROWD",
+            "description": "<p>Take the lead with JUST-RELEASED New makeup from MISS ROSE Professional Makeup.</p>",
+            "text_padding": 20,
+            "button_label": "Learn more",
+            "button_link": "",
+            "image": "shopify://shop_images/img_1.webp",
+            "image_border_radius": 8,
+            "background_color": "#ffffff",
+            "heading_color": "#000000",
+            "text_color": "#000000",
+            "button_background": "#000000",
+            "button_text_color": "#ffffff",
+            "button_hover_background": "#333333",
+            "heading_size": 32,
+            "text_size": 16,
+            "padding_top": 60,
+            "padding_bottom": 60,
+            "button_border_radius": 8
+          },
+          "blocks": {}
+        },
+        "ai_gen_block_04da80c_JA8mCF": {
+          "type": "ai_gen_block_04da80c",
+          "settings": {
+            "layout": "image_left",
+            "mobile_layout": "text_first",
+            "vertical_alignment": "center",
+            "column_gap": 40,
+            "heading": "VIBRANT SHADES FOR UNFORGETABLE LOOKS",
+            "description": "<p><br/>From mesmerizing eyeshadow palettes to bold lipsticks and captivating blushes, these colors are designed to help you create unforgettable looks that turn heads.<br/><br/></p>",
+            "text_padding": 20,
+            "button_label": "Learn more",
+            "button_link": "",
+            "image": "shopify://shop_images/img_3.webp",
+            "image_border_radius": 8,
+            "background_color": "#ffffff",
+            "heading_color": "#000000",
+            "text_color": "#000000",
+            "button_background": "#000000",
+            "button_text_color": "#ffffff",
+            "button_hover_background": "#333333",
+            "heading_size": 32,
+            "text_size": 16,
+            "padding_top": 60,
+            "padding_bottom": 60,
+            "button_border_radius": 8
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "ai_gen_block_04da80c_UrLaig",
+        "ai_gen_block_04da80c_GkU6AP",
+        "ai_gen_block_04da80c_JA8mCF"
+      ],
+      "settings": {
+        "content_direction": "column",
+        "vertical_on_mobile": true,
+        "horizontal_alignment": "flex-start",
+        "vertical_alignment": "center",
+        "align_baseline": false,
+        "horizontal_alignment_flex_direction_column": "flex-start",
+        "vertical_alignment_flex_direction_column": "center",
+        "gap": 12,
+        "section_width": "page-width",
+        "section_height": "",
+        "section_height_custom": 50,
+        "color_scheme": "",
+        "background_media": "none",
+        "video_position": "cover",
+        "background_image_position": "cover",
+        "border": "none",
+        "border_width": 1,
+        "border_opacity": 100,
+        "border_radius": 0,
+        "toggle_overlay": false,
+        "overlay_color": "#00000026",
+        "overlay_style": "solid",
+        "gradient_direction": "to top",
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
     }
   },
   "order": [
     "hero_jVaWmY",
     "1762857422cd870f97",
     "product_list_fa6P9H",
-    "17628597425e79e558"
+    "17628597425e79e558",
+    "17628602738b153990"
   ]
 }
