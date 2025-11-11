@@ -75,6 +75,19 @@
         "announcement_BxgCk9": {
           "type": "_announcement",
           "settings": {
+            "text": "<strong>⭐ 19000+ 5 Star Reviews</strong>",
+            "link": "",
+            "font": "var(--font-subheading--family)",
+            "font_size": "0.75rem",
+            "weight": "",
+            "letter_spacing": "normal",
+            "case": "none"
+          },
+          "blocks": {}
+        },
+        "announcement_McNQAb": {
+          "type": "_announcement",
+          "settings": {
             "text": "<strong>Join 8 Lac+ Customers Who Love MissRose.com.pk🩷</strong>",
             "link": "",
             "font": "var(--font-subheading--family)",
@@ -101,6 +114,7 @@
       },
       "block_order": [
         "announcement_BxgCk9",
+        "announcement_McNQAb",
         "announcement_hYybqd"
       ],
       "name": "t:names.announcement_bar",
