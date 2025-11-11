@@ -26,10 +26,38 @@
             "case": "none"
           },
           "blocks": {}
+        },
+        "announcement_9KFVi3": {
+          "type": "_announcement",
+          "settings": {
+            "text": "Free Shipping on orders above Rs 2999",
+            "link": "",
+            "font": "var(--font-body--family)",
+            "font_size": "1rem",
+            "weight": "",
+            "letter_spacing": "normal",
+            "case": "none"
+          },
+          "blocks": {}
+        },
+        "announcement_9Lpfic": {
+          "type": "_announcement",
+          "settings": {
+            "text": "<strong>Free Gift on purchases above Rs 3999</strong>",
+            "link": "",
+            "font": "var(--font-body--family)",
+            "font_size": "1rem",
+            "weight": "",
+            "letter_spacing": "normal",
+            "case": "none"
+          },
+          "blocks": {}
         }
       },
       "block_order": [
-        "announcement_xMWCwj"
+        "announcement_xMWCwj",
+        "announcement_9KFVi3",
+        "announcement_9Lpfic"
       ],
       "name": "t:names.announcement_bar",
       "settings": {
