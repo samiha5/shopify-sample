@@ -634,9 +634,6 @@
     }
   },
   "platform_customizations": {
-    "custom_css": [
-      ".faq-question {background: none; border: none; font-weight: bold; cursor: pointer; padding: 10px; text-align: left;}",
-      ".faq-answer {padding: 10px; border-left: 2px solid #ccc;}"
-    ]
+    "custom_css": []
   }
 }
