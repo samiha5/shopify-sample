@@ -1,0 +1,116 @@
+{% comment %}
+  FAQ accordion section
+  - Add FAQ items in Theme Editor as blocks (question + answer)
+  - Uses <details> for accessibility; small JS rotates chevron
+{% endcomment %}
+
+<section class="faq-section section-wrapper" aria-label="Frequently Asked Questions">
+  <div class="container">
+    {% if section.settings.heading != blank %}
+      <h2 class="faq-heading">{{ section.settings.heading }}</h2>
+    {% endif %}
+
+    <div class="faq-list">
+      {% for block in section.blocks %}
+        {% if block.type == 'faq_item' %}
+          <details class="faq-item" {% if block.settings.open_by_default %}open{% endif %} role="group" aria-labelledby="faq-{{ block.id }}-q">
+            <summary id="faq-{{ block.id }}-q" class="faq-question">
+              <span class="faq-question-text">{{ block.settings.question }}</span>
+              <svg class="faq-chevron" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </summary>
+            <div class="faq-answer" id="faq-{{ block.id }}-a">
+              {{ block.settings.answer }}
+            </div>
+          </details>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+
+  <style>
+    /* Basic layout - tweak to match your theme */
+    .faq-section { padding: 48px 0; }
+    .faq-heading { text-align: center; font-size: 34px; margin-bottom: 24px; font-weight: 600; }
+    .faq-list { max-width: 900px; margin: 0 auto; }
+    .faq-item { border-top: 1px solid rgba(0,0,0,0.06); padding: 18px 0; }
+    .faq-item:last-child { border-bottom: 1px solid rgba(0,0,0,0.06); }
+    summary.faq-question { cursor: pointer; list-style: none; display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 18px; padding: 0; outline: none; }
+    summary.faq-question::-webkit-details-marker { display: none; } /* hide default marker */
+    .faq-question-text { display: inline-block; font-weight: 500; }
+    .faq-answer { margin-top: 12px; font-size: 15px; line-height: 1.6; color: #333; }
+    .faq-chevron { transition: transform 0.25s ease; opacity: 0.9; }
+    details[open] .faq-chevron { transform: rotate(180deg); }
+    /* Add subtle focus style for keyboard users */
+    summary.faq-question:focus { outline: 3px solid rgba(0,0,0,0.08); border-radius: 4px; }
+    /* Responsive */
+    @media (max-width: 600px) {
+      .faq-heading { font-size: 26px; }
+      .faq-question { font-size: 16px; }
+    }
+  </style>
+
+  <script>
+    (function(){
+      // No heavy JS needed — just improve keyboard accessibility and link behavior
+      // Make sure links in answers open normally and summary toggles on Enter/Space
+      document.querySelectorAll('.faq-item summary').forEach(function(summary){
+        summary.addEventListener('keydown', function(e){
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            // toggle the details element
+            var details = summary.parentElement;
+            details.open = !details.open;
+          }
+        });
+      });
+    })();
+  </script>
+
+  {% schema %}
+  {
+    "name": "FAQ",
+    "settings": [
+      {
+        "type": "text",
+        "id": "heading",
+        "label": "Heading",
+        "default": "Frequently Asked Questions"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "faq_item",
+        "name": "FAQ item",
+        "settings": [
+          {
+            "type": "text",
+            "id": "question",
+            "label": "Question",
+            "default": "What if I receive damaged / wrong product ?"
+          },
+          {
+            "type": "textarea",
+            "id": "answer",
+            "label": "Answer (supports HTML)",
+            "default": "Please contact our support within 48 hours..."
+          },
+          {
+            "type": "checkbox",
+            "id": "open_by_default",
+            "label": "Open by default",
+            "default": false
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "FAQ",
+        "category": "Pages"
+      }
+    ]
+  }
+  {% endschema %}
+</section>
