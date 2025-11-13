@@ -11,35 +11,6 @@
   "sections": {
     "176302773859332f7f": {
       "type": "_blocks",
-      "blocks": {
-        "ai_gen_block_f681665_UJer9K": {
-          "type": "ai_gen_block_f681665",
-          "settings": {
-            "question_1": "What if I receive damaged / wrong product ?",
-            "answer_1": "<p>Contact Us in Office timing<strong>(Mon-Friday 09:00 Am to 05:00 Pm)</strong>via<a href=\"tel:+923330529002\" title=\"tel:+923330529002\"><strong>0333-052-9002 </strong></a>OR Email at<a href=\"mailto:care@cloemor.com\" title=\"mailto:care@cloemor.com\">missrose.com.pk@gmail.com</a>. We'll replace it as soon as possible.<br/></p>",
-            "question_2": "Is there any Return Policy?",
-            "answer_2": "<p>Yes, We Accept Returns within <em>7 Days</em> After Delivery. You'll get <em>100% Cashback</em> If Product is not as described.</p>",
-            "question_3": "How many Days it will take for Delivery?",
-            "answer_3": "<p>Your Parcel will be at your door-step within 3 - 5 Working Days. If You <a href=\"https://missrose.com.pk/collections/all\">Order Now</a></p>",
-            "question_4": "What If I didn't received any confirmation message?",
-            "answer_4": "<p>If <em>Thank You</em> message appears after submitting your Order information - then the order is confirmed and please expect 3 - 5 working days for delivery.</p>",
-            "question_5": "Your Products are Original?",
-            "answer_5": "<p><em>YES</em>,<a href=\"https://missrose.com.pk/\">Missrose.com.pk</a> store is authorized to sell 100% ORIGINAL & GUARANTEED products in Pakistan.</p>",
-            "spacing": 20,
-            "border_color": "#e6e6e6",
-            "question_size": 18,
-            "question_weight": "600",
-            "question_color": "#000000",
-            "answer_size": 14,
-            "answer_color": "#000000cf",
-            "icon_color": "#000000"
-          },
-          "blocks": {}
-        }
-      },
-      "block_order": [
-        "ai_gen_block_f681665_UJer9K"
-      ],
       "settings": {
         "content_direction": "column",
         "vertical_on_mobile": true,
@@ -96,11 +67,37 @@
             "padding-inline-end": 0
           },
           "blocks": {}
+        },
+        "ai_gen_block_f681665_YqwQYA": {
+          "type": "ai_gen_block_f681665",
+          "settings": {
+            "question_1": "What if I receive damaged / wrong product ?",
+            "answer_1": "<p>Contact Us in Office timing<strong>(Mon-Friday 09:00 Am to 05:00 Pm)</strong>via<a href=\"tel:+923330529002\" title=\"tel:+923330529002\"><strong>0333-052-9002 </strong></a>OR Email at<a href=\"mailto:care@cloemor.com\" title=\"mailto:care@cloemor.com\">missrose.com.pk@gmail.com</a>. We'll replace it as soon as possible.<br/></p>",
+            "question_2": "Is there any Return Policy?",
+            "answer_2": "<p>Yes, We Accept Returns within <em>7 Days</em> After Delivery. You'll get <em>100% Cashback</em> If Product is not as described.</p>",
+            "question_3": "How many Days it will take for Delivery?",
+            "answer_3": "<p>Your Parcel will be at your door-step within 3 - 5 Working Days. If You <a href=\"https://missrose.com.pk/collections/all\">Order Now</a></p>",
+            "question_4": "What If I didn't received any confirmation message?",
+            "answer_4": "<p>If <em>Thank You</em> message appears after submitting your Order information - then the order is confirmed and please expect 3 - 5 working days for delivery.</p>",
+            "question_5": "Your Products are Original?",
+            "answer_5": "<p><em>YES</em>,<a href=\"https://missrose.com.pk/\">Missrose.com.pk</a> store is authorized to sell 100% ORIGINAL & GUARANTEED products in Pakistan.</p>",
+            "spacing": 20,
+            "border_color": "#e6e6e6",
+            "question_size": 14,
+            "question_weight": "600",
+            "question_color": "#000000",
+            "answer_size": 14,
+            "answer_color": "#000000cf",
+            "icon_color": "#000000"
+          },
+          "blocks": {}
         }
       },
       "block_order": [
-        "heading"
+        "heading",
+        "ai_gen_block_f681665_YqwQYA"
       ],
+      "custom_css": [],
       "settings": {
         "content_direction": "column",
         "gap": 32,
