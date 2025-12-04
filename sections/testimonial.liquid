@@ -1,20 +1,13 @@
 {% comment %}
   testimonial-carousel.liquid
-  - 6 editable blocks
-  - Shows exactly 3 cards (prev / center / next) in a non-wrapping carousel
-  - Center card scales up; arrows move one step uniformly
+  Simple, non-wrapping 3-up carousel (classic behavior)
+  Up to 6 editable testimonial cards.
 {% endcomment %}
 
-<section
-  id="testimonial-carousel-{{ section.id }}"
-  class="testimonial-carousel-section"
-  data-section-id="{{ section.id }}"
->
+<section id="testimonial-carousel-{{ section.id }}" class="testimonial-carousel-section" data-section-id="{{ section.id }}">
   <div class="carousel-inner">
     <button class="carousel-arrow carousel-arrow-left" aria-label="Previous">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </button>
 
     <div class="carousel-viewport">
@@ -41,11 +34,9 @@
             </div>
 
             <div class="card-body">
-              <p class="card-quote">
-                {{ block.settings.quote | default: 'The service was absolutely impeccable. I will come back again.' }}
-              </p>
-              <p class="card-title">{{ block.settings.title | default: 'Firstname L.' }}</p>
-              <p class="card-subtitle">{{ block.settings.role | default: 'Happy customer, city' }}</p>
+              <p class="card-quote">{{ block.settings.quote | default: "The service was absolutely impeccable. I will come back again." }}</p>
+              <p class="card-title">{{ block.settings.title | default: "Firstname L." }}</p>
+              <p class="card-subtitle">{{ block.settings.role | default: "Happy customer, city" }}</p>
             </div>
           </div>
         {% endfor %}
@@ -53,21 +44,18 @@
     </div>
 
     <button class="carousel-arrow carousel-arrow-right" aria-label="Next">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </button>
   </div>
 
   <style>
-    /* Container */
+    /* container vars */
     #testimonial-carousel-{{ section.id }} { padding: 40px 0; --card-width: 280px; --card-height: 420px; --gap: 28px; }
     .testimonial-carousel-section .carousel-inner {
       display:flex; align-items:center; gap:16px; position:relative; justify-content:center;
       max-width:1200px; margin:0 auto;
     }
 
-    /* Arrows */
     .carousel-arrow {
       background: white;
       border-radius: 50%;
@@ -76,14 +64,12 @@
       box-shadow: 0 6px 18px rgba(18,18,18,0.06);
       border: none; cursor:pointer;
     }
-    .carousel-arrow[disabled] {
-      opacity: .45; cursor: default; pointer-events: none;
-    }
-    .carousel-arrow svg { color: #222; }
+    .carousel-arrow[disabled] { opacity:.45; pointer-events:none; cursor:default; }
+    .carousel-arrow svg { color:#222; }
 
     .carousel-viewport {
-      overflow: hidden;
-      width: calc( (var(--card-width) * 3) + (var(--gap) * 2) ); /* show exactly 3 cards */
+      overflow:hidden;
+      width: calc( (var(--card-width) * 3) + (var(--gap) * 2) );
     }
 
     .carousel-track {
@@ -95,277 +81,172 @@
       padding: 10px 0;
     }
 
-    /* Card base */
     .carousel-card {
       width: var(--card-width);
       height: var(--card-height);
-      background: #fff;
-      border-radius: 14px;
+      background:#fff;
+      border-radius:14px;
       box-shadow: 0 6px 16px rgba(20,20,20,0.06);
-      overflow: hidden;
+      overflow:hidden;
       display:flex;
       flex-direction:column;
       transition: transform 420ms cubic-bezier(.2,.9,.2,1), box-shadow 420ms;
       transform-origin: center bottom;
-      flex-shrink: 0;
+      flex-shrink:0;
     }
 
-    .card-image { flex: 0 0 48%; position:relative; background: #f5f5f5; display:flex; align-items:center; justify-content:center; overflow:hidden; }
+    .card-image { flex:0 0 48%; background:#f5f5f5; display:flex; align-items:center; justify-content:center; overflow:hidden; }
     .card-image img { width:100%; height:100%; object-fit:cover; display:block; }
 
-    .card-body { flex:1; padding: 20px; display:flex; flex-direction:column; justify-content:center; text-align:center; gap:10px; }
-    .card-quote { font-size: 14px; line-height:1.45; color:#222; margin:0 12px; min-height:56px; }
+    .card-body { flex:1; padding:20px; display:flex; flex-direction:column; justify-content:center; text-align:center; gap:10px; }
+    .card-quote { font-size:14px; line-height:1.45; color:#222; margin:0 12px; min-height:56px; }
     .card-title { font-weight:700; margin-top:8px; font-size:14px; }
     .card-subtitle { font-size:12px; color:#777; margin-top:4px; }
 
-    /* Center / prev / next visual states */
-    .carousel-card.center {
-      transform: scale(1.08);
-      box-shadow: 0 20px 40px rgba(18,18,18,0.12);
-      z-index: 3;
-    }
-    .carousel-card.prev,
-    .carousel-card.next {
-      transform: scale(0.98);
-      z-index: 2;
-      opacity: 0.98;
-    }
-    .carousel-card.hidden {
-      transform: scale(0.92);
-      opacity: 0.35;
-      filter: blur(.2px);
-      z-index: 1;
-    }
+    .carousel-card.center { transform: scale(1.08); box-shadow: 0 20px 40px rgba(18,18,18,0.12); z-index:3; }
+    .carousel-card.side { transform: scale(0.98); z-index:2; opacity:0.98; }
+    .carousel-card.hidden { transform: scale(0.92); opacity:0.35; filter: blur(.2px); z-index:1; }
 
-    /* Responsive */
-    @media (max-width: 900px) {
-      #testimonial-carousel-{{ section.id }} { --card-width: 240px; --card-height: 380px; }
+    @media (max-width:900px) {
+      #testimonial-carousel-{{ section.id }} { --card-width:240px; --card-height:380px; }
       .carousel-viewport { width: calc( (var(--card-width) * 3) + (var(--gap) * 2) ); }
     }
-    @media (max-width: 640px) {
-      #testimonial-carousel-{{ section.id }} { padding: 24px 0; --card-width: 200px; --card-height: 340px; }
-      .carousel-arrow { display:none; } /* hide arrows on small screens (touch swipe will work) */
-      .carousel-viewport { width: 100%; }
-      .carousel-track { padding: 6px; }
+    @media (max-width:640px) {
+      #testimonial-carousel-{{ section.id }} { padding:24px 0; --card-width:200px; --card-height:340px; }
+      .carousel-arrow { display:none; }
+      .carousel-viewport { width:100%; }
+      .carousel-track { padding:6px; }
     }
   </style>
 
   <script>
-    (function () {
+    (function(){
       const root = document.getElementById('testimonial-carousel-{{ section.id }}');
       if (!root) return;
       const track = root.querySelector('.carousel-track');
       const cards = Array.from(root.querySelectorAll('.carousel-card'));
       const leftBtn = root.querySelector('.carousel-arrow-left');
       const rightBtn = root.querySelector('.carousel-arrow-right');
-
       const total = cards.length;
       if (total === 0) return;
 
-      // Non-wrapping carousel: center index must be in range [1, total-2]
-      // so there is always a prev and next visible card (three visible spots).
-      const minCenter = 1;
-      const maxCenter = Math.max(1, total - 2);
+      // leftIndex = index of left-most visible card. Range: [0, total - 3]
+      let leftIndex = 0;
+      const maxLeft = Math.max(0, total - 3);
 
-      // initial center: keep it at second card (index 1) so first three show
-      let currentIndex = Math.min(Math.max(minCenter, 1), maxCenter);
-
-      // get numeric gap (from CSS).
       function getGap() {
         const cs = getComputedStyle(track);
-        // modern browsers expose gap; fallback to CSS variable or 28
-        const gapVal = cs.gap || cs.columnGap || cs.rowGap || '28px';
-        return parseFloat(gapVal) || 28;
+        return parseFloat(cs.gap || '28') || 28;
       }
-
       function fullCardWidth() {
         if (!cards[0]) return 0;
-        const w = cards[0].getBoundingClientRect().width;
-        return w + getGap();
+        return cards[0].getBoundingClientRect().width + getGap();
       }
 
-      function updateClasses() {
+      function updateTransform(animate = true) {
+        const full = fullCardWidth();
+        const offset = - (leftIndex * full);
+        if (!animate) track.style.transition = 'none';
+        else track.style.transition = '';
+        track.style.transform = `translateX(${offset}px)`;
+        if (!animate) void track.offsetHeight;
+      }
+
+      function updateVisualClasses() {
         cards.forEach((c, i) => {
-          c.classList.remove('center', 'prev', 'next', 'hidden');
-          if (i === currentIndex) c.classList.add('center');
-          else if (i === currentIndex - 1) c.classList.add('prev');
-          else if (i === currentIndex + 1) c.classList.add('next');
-          else c.classList.add('hidden');
+          c.classList.remove('center','side','hidden');
+          if (i >= leftIndex && i <= leftIndex + 2) {
+            // visible window
+            if (i === leftIndex + 1) c.classList.add('center');
+            else c.classList.add('side');
+          } else {
+            c.classList.add('hidden');
+          }
         });
       }
 
-      function updatePosition(animate = true) {
-        const leftMostIndex = currentIndex - 1; // we always show leftMost, center, rightMost
-        const full = fullCardWidth();
-        let offset = -(leftMostIndex * full);
-        // If viewport is wider than exactly 3 cards (on very small screens we use 100% width),
-        // center the 3-cards block within viewport.
-        const viewport = root.querySelector('.carousel-viewport');
-        const viewportWidth = viewport.getBoundingClientRect().width;
-        const threeWidth = cards[0].getBoundingClientRect().width * 3 + getGap() * 2;
-        const extra = Math.max(0, (viewportWidth - threeWidth) / 2);
-        offset += extra;
-
-        if (!animate) {
-          track.style.transition = 'none';
-        } else {
-          track.style.transition = '';
-        }
-        track.style.transform = `translateX(${offset}px)`;
-        if (!animate) void track.offsetHeight; // force reflow when removing transition
-      }
-
       function updateArrows() {
-        if (leftBtn) leftBtn.disabled = currentIndex <= minCenter;
-        if (rightBtn) rightBtn.disabled = currentIndex >= maxCenter;
+        if (leftBtn) leftBtn.disabled = (leftIndex <= 0);
+        if (rightBtn) rightBtn.disabled = (leftIndex >= maxLeft);
       }
 
-      function goTo(index) {
-        const clamped = Math.max(minCenter, Math.min(maxCenter, index));
-        if (clamped === currentIndex) return;
-        currentIndex = clamped;
-        updateClasses();
-        updatePosition();
+      function goToLeft(index) {
+        leftIndex = Math.max(0, Math.min(maxLeft, index));
+        updateTransform();
+        updateVisualClasses();
         updateArrows();
       }
 
-      function next() {
-        goTo(currentIndex + 1);
-      }
-      function prev() {
-        goTo(currentIndex - 1);
-      }
+      function next() { goToLeft(leftIndex + 1); }
+      function prev() { goToLeft(leftIndex - 1); }
 
-      // initialize
-      updateClasses();
-      // Wait a tick so widths compute correctly, then position
-      setTimeout(() => {
-        updatePosition(false);
-        updateArrows();
-      }, 40);
+      // init
+      updateVisualClasses();
+      setTimeout(() => { updateTransform(false); updateArrows(); }, 20);
 
       leftBtn && leftBtn.addEventListener('click', prev);
       rightBtn && rightBtn.addEventListener('click', next);
 
       // keyboard navigation
       root.tabIndex = 0;
-      root.addEventListener('keydown', function (e) {
+      root.addEventListener('keydown', function(e){
         if (e.key === 'ArrowLeft') prev();
         if (e.key === 'ArrowRight') next();
       });
 
-      // basic swipe for touch
-      let startX = null,
-        isTouching = false;
-      root.addEventListener(
-        'touchstart',
-        function (e) {
-          isTouching = true;
-          startX = e.touches[0].clientX;
-        },
-        { passive: true }
-      );
-      root.addEventListener(
-        'touchend',
-        function (e) {
-          if (!isTouching) return;
-          const endX = (e.changedTouches && e.changedTouches[0] && e.changedTouches[0].clientX) || startX;
-          const dx = endX - startX;
-          if (Math.abs(dx) > 30) {
-            if (dx < 0) next();
-            else prev();
-          }
-          isTouching = false;
-          startX = null;
-        },
-        { passive: true }
-      );
+      // swipe
+      let startX = null, isTouch = false;
+      root.addEventListener('touchstart', (e)=> { isTouch = true; startX = e.touches[0].clientX; }, {passive:true});
+      root.addEventListener('touchend', (e)=> {
+        if (!isTouch) return;
+        const endX = (e.changedTouches && e.changedTouches[0] && e.changedTouches[0].clientX) || startX;
+        const dx = endX - startX;
+        if (Math.abs(dx) > 30) {
+          if (dx < 0) next(); else prev();
+        }
+        isTouch = false; startX = null;
+      }, {passive:true});
 
-      // on resize reposition without animation
+      // on resize recompute
       let resizeTimer;
-      window.addEventListener('resize', function () {
+      window.addEventListener('resize', function(){
         clearTimeout(resizeTimer);
-        resizeTimer = setTimeout(function () {
-          updatePosition(false);
-        }, 120);
+        resizeTimer = setTimeout(()=> { updateTransform(false); }, 120);
       });
     })();
   </script>
 
   {% schema %}
-{
-  "name": "Testimonials Carousel",
-  "settings": [],
-  "blocks": [
-    {
-      "type": "card",
-      "name": "Testimonial card",
-      "settings": [
-        { "type": "image_picker", "id": "image", "label": "Image" },
-        { "type": "text", "id": "title", "label": "Name", "default": "Firstname L." },
-        { "type": "text", "id": "role", "label": "Role / Location", "default": "Happy customer, City" },
-        {
-          "type": "textarea",
-          "id": "quote",
-          "label": "Quote",
-          "default": "The service was absolutely impeccable. I will come back again!"
-        }
-      ]
-    }
-  ],
-  "max_blocks": 6,
-  "presets": [
-    {
-      "name": "Testimonials carousel",
-      "category": "Testimonials",
-      "blocks": [
-        {
-          "type": "card",
-          "settings": {
-            "title": "Alex R.",
-            "role": "Seattle, WA",
-            "quote": "Amazing experience, couldn't recommend more.",
-            "image": ""
-          }
-        },
-        {
-          "type": "card",
-          "settings": {
-            "title": "Priya S.",
-            "role": "Lahore, PK",
-            "quote": "Exceptional service and friendly staff.",
-            "image": ""
-          }
-        },
-        {
-          "type": "card",
-          "settings": {
-            "title": "Marcus T.",
-            "role": "Berlin, DE",
-            "quote": "Top notch quality and fast delivery.",
-            "image": ""
-          }
-        },
-        {
-          "type": "card",
-          "settings": {
-            "title": "Rita K.",
-            "role": "NYC, USA",
-            "quote": "We come here every season — superb.",
-            "image": ""
-          }
-        },
-        {
-          "type": "card",
-          "settings": { "title": "Omar N.", "role": "Dubai", "quote": "They went above and beyond.", "image": "" }
-        },
-        {
-          "type": "card",
-          "settings": { "title": "Li W.", "role": "Shanghai", "quote": "Perfect from start to finish.", "image": "" }
-        }
-      ]
-    }
-  ]
-}
+  {
+    "name": "Testimonials Carousel",
+    "settings": [],
+    "blocks": [
+      {
+        "type": "card",
+        "name": "Testimonial card",
+        "settings": [
+          { "type": "image_picker", "id": "image", "label": "Image" },
+          { "type": "text", "id": "title", "label": "Name", "default": "Firstname L." },
+          { "type": "text", "id": "role", "label": "Role / Location", "default": "Happy customer, City" },
+          { "type": "textarea", "id": "quote", "label": "Quote", "default": "The service was absolutely impeccable. I will come back again!" }
+        ]
+      }
+    ],
+    "max_blocks": 6,
+    "presets": [
+      {
+        "name": "Testimonials carousel",
+        "category": "Testimonials",
+        "blocks": [
+          { "type": "card", "settings": { "title":"Alex R.","role":"Seattle, WA","quote":"Amazing experience, couldn't recommend more.","image":"" } },
+          { "type": "card", "settings": { "title":"Priya S.","role":"Lahore, PK","quote":"Exceptional service and friendly staff.","image":"" } },
+          { "type": "card", "settings": { "title":"Marcus T.","role":"Berlin, DE","quote":"Top notch quality and fast delivery.","image":"" } },
+          { "type": "card", "settings": { "title":"Rita K.","role":"NYC, USA","quote":"We come here every season — superb.","image":"" } },
+          { "type": "card", "settings": { "title":"Omar N.","role":"Dubai","quote":"They went above and beyond.","image":"" } },
+          { "type": "card", "settings": { "title":"Li W.","role":"Shanghai","quote":"Perfect from start to finish.","image":"" } }
+        ]
+      }
+    ]
+  }
   {% endschema %}
 </section>
