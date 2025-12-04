@@ -1,0 +1,202 @@
+{% schema %}
+{
+  "name": "Routine Collection Tabs",
+  "settings": [
+    {
+      "type": "text",
+      "id": "small_heading",
+      "label": "Small Top Heading",
+      "default": "WHAT’S NEW"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button Label",
+      "default": "DISCOVER THE COLLECTION"
+    }
+  ],
+
+  "blocks": [
+    {
+      "type": "tab",
+      "name": "Tab",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "tab_icon",
+          "label": "Tab Icon (small circle image)"
+        },
+        {
+          "type": "text",
+          "id": "tab_title",
+          "label": "Main Heading",
+          "default": "New Unlimited Routine Collection"
+        },
+        {
+          "type": "textarea",
+          "id": "tab_description",
+          "label": "Description",
+          "default": "Foundation that lasts up to 24 hours* for a flawless base"
+        },
+        {
+          "type": "image_picker",
+          "id": "main_image",
+          "label": "Main Right Image (big)"
+        },
+        {
+          "type": "image_picker",
+          "id": "img_bottom_left",
+          "label": "Bottom Left Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "img_bottom_right",
+          "label": "Bottom Right Image"
+        }
+      ]
+    }
+  ],
+
+  "presets": [
+    {
+      "name": "Routine Collection Tabs"
+    }
+  ]
+}
+{% endschema %}
+
+<style>
+  .routine-wrapper {
+    display: flex;
+    justify-content: space-between;
+    gap: 30px;
+    padding: 40px 0;
+    align-items: center;
+  }
+
+  .routine-left {
+    width: 45%;
+  }
+
+  .routine-right {
+    width: 50%;
+  }
+
+  .routine-tabs {
+    display: flex;
+    gap: 8px;
+    margin: 15px 0;
+  }
+
+  .routine-tabs img {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: 0.2s;
+  }
+
+  .routine-tabs img.active {
+    border-color: black;
+  }
+
+  .routine-title {
+    font-size: 48px;
+    font-weight: 600;
+    line-height: 1.1;
+  }
+
+  .routine-description {
+    font-size: 16px;
+    margin: 15px 0 25px;
+  }
+
+  .routine-right img {
+    width: 100%;
+    border-radius: 18px;
+  }
+
+  .routine-bottom-images {
+    display: flex;
+    margin-top: 15px;
+    gap: 15px;
+  }
+
+  .routine-bottom-images img {
+    width: 50%;
+    border-radius: 18px;
+  }
+
+  .routine-btn {
+    display: inline-block;
+    padding: 12px 30px;
+    background: #fff;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+
+  .routine-btn:hover {
+    background: #f7f7f7;
+  }
+</style>
+
+<div class="routine-wrapper" id="routineSection">
+  <div class="routine-left">
+
+    <p style="font-size:14px; font-weight:600;">{{ section.settings.small_heading }}</p>
+
+    <div class="routine-tabs">
+      {% for block in section.blocks %}
+        <img 
+          src="{{ block.settings.tab_icon | img_url: '100x100' }}" 
+          class="{% if forloop.first %}active{% endif %}" 
+          data-index="{{ forloop.index0 }}"
+        >
+      {% endfor %}
+    </div>
+
+    {% for block in section.blocks %}
+      <div class="routine-content" data-tab="{{ forloop.index0 }}" {% unless forloop.first %}style="display:none"{% endunless %}>
+        <h2 class="routine-title">{{ block.settings.tab_title }}</h2>
+        <p class="routine-description">{{ block.settings.tab_description }}</p>
+        <a class="routine-btn">{{ section.settings.button_label }}</a>
+      </div>
+    {% endfor %}
+  </div>
+
+  <div class="routine-right">
+    {% for block in section.blocks %}
+      <div class="routine-images" data-tab-img="{{ forloop.index0 }}" {% unless forloop.first %}style="display:none"{% endunless %}>
+        <img src="{{ block.settings.main_image | img_url: '800x' }}">
+        <div class="routine-bottom-images">
+          <img src="{{ block.settings.img_bottom_left | img_url: '400x' }}">
+          <img src="{{ block.settings.img_bottom_right | img_url: '400x' }}">
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+<script>
+  const tabs = document.querySelectorAll('#routineSection .routine-tabs img');
+  const contents = document.querySelectorAll('#routineSection .routine-content');
+  const images = document.querySelectorAll('#routineSection .routine-images');
+
+  tabs.forEach((tab, i) => {
+    tab.addEventListener('click', () => {
+
+      tabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+
+      contents.forEach(c => c.style.display = 'none');
+      images.forEach(img => img.style.display = 'none');
+
+      contents[i].style.display = 'block';
+      images[i].style.display = 'block';
+    });
+  });
+</script>
