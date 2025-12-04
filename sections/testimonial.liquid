@@ -1,10 +1,7 @@
 {% comment %}
   testimonial-carousel.liquid
-  Infinite wrap-around 3-up carousel (clone technique)
-  - Shows exactly 3 cards at once
-  - Wraps seamlessly (infinite)
-  - Center card scales up
-  - Up to 6 editable testimonial cards
+  Infinite wrap-around 3-up carousel — improved so the next 3-up window
+  is applied immediately on click and animation moves that window uniformly.
 {% endcomment %}
 
 <section id="testimonial-carousel-{{ section.id }}" class="testimonial-carousel-section" data-section-id="{{ section.id }}">
@@ -34,10 +31,6 @@
       </div>
 
       <div class="carousel-track" aria-live="polite">
-        {% comment %}
-          JS will populate the visible track by cloning nodes from .carousel-track-original
-          If there are no blocks, create three fallback cards so carousel still works.
-        {% endcomment %}
         {% if section.blocks.size == 0 %}
           {% for i in (1..6) %}
           <div class="carousel-card" data-index="{{ i }}">
@@ -96,53 +89,42 @@
       const leftBtn = root.querySelector('.carousel-arrow-left');
       const rightBtn = root.querySelector('.carousel-arrow-right');
 
-      // gather original cards (if originalContainer used) OR take what's already inside track
+      // gather original cards (either from originalContainer or existing track)
       let originals = Array.from(originalContainer && originalContainer.children && originalContainer.children.length ? originalContainer.children : root.querySelectorAll('.carousel-track > .carousel-card'));
-      // if there were no originals in originalContainer, but track contains placeholders, use those as originals
       if (!originals.length) originals = Array.from(track.children);
 
       const total = originals.length;
       if (total === 0) return;
-
-      // number of clones on each side (we show 3 at once, so clone 3 to be safe)
-      const cloneCount = Math.min(3, total); // don't clone more than total
+      const cloneCount = Math.min(3, total); // number of clones on each side
       let isTransitioning = false;
 
-      // helper to create a node clone that preserves inner HTML and data-index
-      function cloneNode(node, copyIndex) {
+      function cloneNodeSimple(node) {
         const clone = node.cloneNode(true);
-        // mark as clone for debugging
         clone.classList.add('clone');
-        // keep the same data-index attribute (original logical index)
         return clone;
       }
 
-      // clear track and build: [last-clones...] [originals...] [first-clones...]
       function buildTrack() {
         track.innerHTML = '';
-        // append last clones (in same order as originals' end)
+        // append last clones
         for (let i = total - cloneCount; i < total; i++) {
-          const n = cloneNode(originals[i % total]);
+          const n = cloneNodeSimple(originals[i % total]);
           track.appendChild(n);
         }
-        // append originals
+        // append originals (clone them so originals list remains unmodified)
         originals.forEach(n => track.appendChild(n.cloneNode(true)));
         // append first clones
         for (let i = 0; i < cloneCount; i++) {
-          const n = cloneNode(originals[i]);
+          const n = cloneNodeSimple(originals[i]);
           track.appendChild(n);
         }
       }
 
       buildTrack();
 
-      // position index points to left-most visible card within the whole built track
-      // initial left-most should be at the first original (which is at index = cloneCount)
-      let positionIndex = cloneCount; // left-most card index within track (including clones)
-      // total nodes in built track:
+      let positionIndex = cloneCount; // left-most visible card in built track
       let builtCount = track.children.length;
 
-      // compute gap from CSS and card full width
       function getGap() {
         const cs = getComputedStyle(track);
         return parseFloat(cs.gap || '24') || 24;
@@ -154,33 +136,23 @@
         return w + getGap();
       }
 
-      // sets transform based on positionIndex (left-most visible card)
-      function setTransform(animate = true) {
+      // set transform based on a given positionIndex
+      function setTransformTo(index, animate = true) {
         const full = fullCardWidth();
-        const offset = - (positionIndex * full);
+        const offset = - (index * full);
         if (!animate) track.style.transition = 'none';
         else track.style.transition = '';
         track.style.transform = `translateX(${offset}px)`;
         if (!animate) void track.offsetHeight;
-        // update classes for visible items (map visible window to original indices)
-        updateVisualClasses();
       }
 
-      // map a built-track child index to logical original index (0..total-1)
-      function logicalIndexFromBuilt(builtIdx) {
-        // built structure: [last-clones(0..cloneCount-1)] [originals(total)] [first-clones(0..cloneCount-1)]
-        // the original logical index is (builtIndex - cloneCount) mod total, but adjust for clones and negatives
-        const idx = (builtIdx - cloneCount) % total;
-        return (idx + total) % total;
-      }
-
-      function updateVisualClasses() {
+      // update visible classes using a given left-most built index (so we can apply upcoming window immediately)
+      function updateVisualClassesFor(leftMostBuiltIndex) {
         const children = Array.from(track.children);
         children.forEach((c, i) => {
           c.classList.remove('center','side','hidden');
-          // visible window: positionIndex .. positionIndex+2
-          if (i >= positionIndex && i <= positionIndex + 2) {
-            if (i === positionIndex + 1) c.classList.add('center');
+          if (i >= leftMostBuiltIndex && i <= leftMostBuiltIndex + 2) {
+            if (i === leftMostBuiltIndex + 1) c.classList.add('center');
             else c.classList.add('side');
           } else {
             c.classList.add('hidden');
@@ -188,45 +160,58 @@
         });
       }
 
-      // navigation functions
-      function next() {
-        if (isTransitioning) return;
-        isTransitioning = true;
-        positionIndex++;
-        setTransform(true);
-      }
-      function prev() {
-        if (isTransitioning) return;
-        isTransitioning = true;
-        positionIndex--;
-        setTransform(true);
+      // wrapper that updates classes for current positionIndex
+      function updateVisualClasses() {
+        updateVisualClassesFor(positionIndex);
       }
 
-      // handle wrapping: when transition ends check if we've moved into clones and teleport
+      // navigation (applies new classes first, then animates)
+      function goToBuiltIndex(targetIndex) {
+        if (isTransitioning) return;
+        isTransitioning = true;
+        // apply classes for the target window immediately
+        updateVisualClassesFor(targetIndex);
+        // disable buttons
+        if (leftBtn) leftBtn.disabled = true;
+        if (rightBtn) rightBtn.disabled = true;
+        // animate to the target
+        positionIndex = targetIndex;
+        setTransformTo(positionIndex, true);
+      }
+
+      function next() { goToBuiltIndex(positionIndex + 1); }
+      function prev() { goToBuiltIndex(positionIndex - 1); }
+
+      // after animation ends, if we're in clone zone teleport without animation
       track.addEventListener('transitionend', function() {
         isTransitioning = false;
-        // if we've moved right beyond the last original (into first-clones)
+        builtCount = track.children.length;
+        // teleport if moved into first-clones (right side beyond originals)
         if (positionIndex >= cloneCount + total) {
-          // teleport back to the same logical window in the originals
           positionIndex = positionIndex - total;
-          setTransform(false); // no animation
+          setTransformTo(positionIndex, false);
+          updateVisualClasses(); // reflect correct classes after teleport
         }
-        // if we've moved left beyond the first original (into last-clones area)
+        // teleport if moved into last-clones (left side before originals)
         if (positionIndex < cloneCount) {
           positionIndex = positionIndex + total;
-          setTransform(false);
+          setTransformTo(positionIndex, false);
+          updateVisualClasses();
         }
+        // re-enable buttons
+        if (leftBtn) leftBtn.disabled = false;
+        if (rightBtn) rightBtn.disabled = false;
       });
 
-      // init transform (no animation)
-      // slight timeout so DOM renders and widths available
+      // initial placement & classes
       setTimeout(()=> {
         builtCount = track.children.length;
         positionIndex = cloneCount;
-        setTransform(false);
+        setTransformTo(positionIndex, false);
+        updateVisualClasses();
       }, 30);
 
-      // attach buttons
+      // attach controls
       rightBtn && rightBtn.addEventListener('click', next);
       leftBtn && leftBtn.addEventListener('click', prev);
 
@@ -241,7 +226,7 @@
       let startX = 0, isTouching = false;
       root.addEventListener('touchstart', (e) => { isTouching = true; startX = e.touches[0].clientX; }, {passive:true});
       root.addEventListener('touchend', (e) => {
-        if (!isTouching) return;
+        if (!isTouching || isTransitioning) return;
         const endX = (e.changedTouches && e.changedTouches[0] && e.changedTouches[0].clientX) || startX;
         const dx = endX - startX;
         if (Math.abs(dx) > 30) {
@@ -250,11 +235,11 @@
         isTouching = false;
       }, {passive:true});
 
-      // on resize recompute sizes and restore invisibly
+      // responsive: recompute on resize and restore without animation
       let resizeTimer;
       window.addEventListener('resize', function(){
         clearTimeout(resizeTimer);
-        resizeTimer = setTimeout(function(){ setTransform(false); }, 120);
+        resizeTimer = setTimeout(function(){ setTransformTo(positionIndex, false); }, 120);
       });
 
     })();
