@@ -552,6 +552,15 @@
     "testimonial_N7Hb4g": {
       "type": "testimonial",
       "blocks": {
+        "card_H8eHpj": {
+          "type": "card",
+          "settings": {
+            "image": "shopify://shop_images/studded-flats.jpg",
+            "title": "Rahull",
+            "role": "Islamabad , PK",
+            "quote": "The service was absolutely amazing. I will come back again!"
+          }
+        },
         "card_gDAXcX": {
           "type": "card",
           "settings": {
@@ -564,6 +573,7 @@
         "card_7UkM9f": {
           "type": "card",
           "settings": {
+            "image": "shopify://shop_images/flatlay-of-jade-face-roller-laying-on-a-grey-stone.jpg",
             "title": "Priya S.",
             "role": "Lahore, PK",
             "quote": "Exceptional service and friendly staff."
@@ -572,6 +582,7 @@
         "card_fFRPVf": {
           "type": "card",
           "settings": {
+            "image": "shopify://shop_images/rack-of-womens-clothing.jpg",
             "title": "Marcus T.",
             "role": "Berlin, DE",
             "quote": "Top notch quality and fast delivery."
@@ -580,6 +591,7 @@
         "card_RH7FgQ": {
           "type": "card",
           "settings": {
+            "image": "shopify://shop_images/iphone-detects-qr-code.jpg",
             "title": "Rita K.",
             "role": "NYC, USA",
             "quote": "We come here every season — superb."
@@ -588,27 +600,20 @@
         "card_rhKXkp": {
           "type": "card",
           "settings": {
+            "image": "shopify://shop_images/wooden-toothbrushes-lined-up-against-a-green-background.jpg",
             "title": "Omar N.",
             "role": "Dubai",
             "quote": "They went above and beyond."
           }
-        },
-        "card_6xELLR": {
-          "type": "card",
-          "settings": {
-            "title": "Li W.",
-            "role": "Shanghai",
-            "quote": "Perfect from start to finish."
-          }
         }
       },
       "block_order": [
+        "card_H8eHpj",
         "card_gDAXcX",
         "card_7UkM9f",
         "card_fFRPVf",
         "card_RH7FgQ",
-        "card_rhKXkp",
-        "card_6xELLR"
+        "card_rhKXkp"
       ],
       "name": "Testimonials carousel",
       "settings": {}
