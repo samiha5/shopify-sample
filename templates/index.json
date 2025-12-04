@@ -548,6 +548,70 @@
         "padding-block-start": 0,
         "padding-block-end": 0
       }
+    },
+    "testimonial_N7Hb4g": {
+      "type": "testimonial",
+      "blocks": {
+        "card_gDAXcX": {
+          "type": "card",
+          "settings": {
+            "image": "shopify://shop_images/person-fishing-on-the-beach-is-silhouetted-at-sunset.jpg",
+            "title": "Alex R.",
+            "role": "Seattle, WA",
+            "quote": "Amazing experience, couldn't recommend more."
+          }
+        },
+        "card_7UkM9f": {
+          "type": "card",
+          "settings": {
+            "title": "Priya S.",
+            "role": "Lahore, PK",
+            "quote": "Exceptional service and friendly staff."
+          }
+        },
+        "card_fFRPVf": {
+          "type": "card",
+          "settings": {
+            "title": "Marcus T.",
+            "role": "Berlin, DE",
+            "quote": "Top notch quality and fast delivery."
+          }
+        },
+        "card_RH7FgQ": {
+          "type": "card",
+          "settings": {
+            "title": "Rita K.",
+            "role": "NYC, USA",
+            "quote": "We come here every season — superb."
+          }
+        },
+        "card_rhKXkp": {
+          "type": "card",
+          "settings": {
+            "title": "Omar N.",
+            "role": "Dubai",
+            "quote": "They went above and beyond."
+          }
+        },
+        "card_6xELLR": {
+          "type": "card",
+          "settings": {
+            "title": "Li W.",
+            "role": "Shanghai",
+            "quote": "Perfect from start to finish."
+          }
+        }
+      },
+      "block_order": [
+        "card_gDAXcX",
+        "card_7UkM9f",
+        "card_fFRPVf",
+        "card_RH7FgQ",
+        "card_rhKXkp",
+        "card_6xELLR"
+      ],
+      "name": "Testimonials carousel",
+      "settings": {}
     }
   },
   "order": [
@@ -555,6 +619,7 @@
     "1762857422cd870f97",
     "product_list_fa6P9H",
     "17628597425e79e558",
-    "17628602738b153990"
+    "17628602738b153990",
+    "testimonial_N7Hb4g"
   ]
 }
