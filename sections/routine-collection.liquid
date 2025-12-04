@@ -1,194 +1,202 @@
 {% schema %}
 {
-  "name": "KIKO Collection Section",
+  "name": "Routine Collection Tabs",
   "settings": [
     {
       "type": "text",
-      "id": "heading",
-      "label": "Heading",
-      "default": "New Unlimited Brush Collection"
-    },
-    {
-      "type": "textarea",
-      "id": "description",
-      "label": "Description",
-      "default": "It’s short, memorable, and positions the brush as more than just a tool—it’s a gateway to confident creativity."
-    },
-    {
-      "type": "image_picker",
-      "id": "top_image",
-      "label": "Top Large Image"
-    },
-    {
-      "type": "image_picker",
-      "id": "bottom_left",
-      "label": "Bottom Left Image"
-    },
-    {
-      "type": "image_picker",
-      "id": "bottom_right",
-      "label": "Bottom Right Image"
+      "id": "small_heading",
+      "label": "Small Top Heading",
+      "default": "WHAT’S NEW"
     },
     {
       "type": "text",
       "id": "button_label",
       "label": "Button Label",
       "default": "DISCOVER THE COLLECTION"
-    },
-    {
-      "type": "url",
-      "id": "button_link",
-      "label": "Button Link"
     }
   ],
+
+  "blocks": [
+    {
+      "type": "tab",
+      "name": "Tab",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "tab_icon",
+          "label": "Tab Icon (small circle image)"
+        },
+        {
+          "type": "text",
+          "id": "tab_title",
+          "label": "Main Heading",
+          "default": "New Unlimited Routine Collection"
+        },
+        {
+          "type": "textarea",
+          "id": "tab_description",
+          "label": "Description",
+          "default": "Foundation that lasts up to 24 hours* for a flawless base"
+        },
+        {
+          "type": "image_picker",
+          "id": "main_image",
+          "label": "Main Right Image (big)"
+        },
+        {
+          "type": "image_picker",
+          "id": "img_bottom_left",
+          "label": "Bottom Left Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "img_bottom_right",
+          "label": "Bottom Right Image"
+        }
+      ]
+    }
+  ],
+
   "presets": [
     {
-      "name": "KIKO Collection Layout"
+      "name": "Routine Collection Tabs"
     }
   ]
 }
 {% endschema %}
 
+<style>
+  .routine-wrapper {
+    display: flex;
+    justify-content: space-between;
+    gap: 30px;
+    padding: 40px 0;
+    align-items: center;
+  }
 
+  .routine-left {
+    width: 45%;
+  }
 
-<div class="kiko-wrapper">
-  
-  <!-- LEFT COLUMN -->
-  <div class="kiko-left">
-      <h2 class="kiko-title">{{ section.settings.heading }}</h2>
+  .routine-right {
+    width: 50%;
+  }
 
-      <p class="kiko-desc">
-        {{ section.settings.description }}
-      </p>
+  .routine-tabs {
+    display: flex;
+    gap: 8px;
+    margin: 15px 0;
+  }
 
-      {% if section.settings.button_label != blank %}
-      <a href="{{ section.settings.button_link }}" class="kiko-btn">
-        {{ section.settings.button_label }}
-      </a>
-      {% endif %}
+  .routine-tabs img {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: 0.2s;
+  }
+
+  .routine-tabs img.active {
+    border-color: black;
+  }
+
+  .routine-title {
+    font-size: 48px;
+    font-weight: 600;
+    line-height: 1.1;
+  }
+
+  .routine-description {
+    font-size: 16px;
+    margin: 15px 0 25px;
+  }
+
+  .routine-right img {
+    width: 100%;
+    border-radius: 18px;
+  }
+
+  .routine-bottom-images {
+    display: flex;
+    margin-top: 15px;
+    gap: 15px;
+  }
+
+  .routine-bottom-images img {
+    width: 50%;
+    border-radius: 18px;
+  }
+
+  .routine-btn {
+    display: inline-block;
+    padding: 12px 30px;
+    background: #fff;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+
+  .routine-btn:hover {
+    background: #f7f7f7;
+  }
+</style>
+
+<div class="routine-wrapper" id="routineSection">
+  <div class="routine-left">
+
+    <p style="font-size:14px; font-weight:600;">{{ section.settings.small_heading }}</p>
+
+    <div class="routine-tabs">
+      {% for block in section.blocks %}
+        <img 
+          src="{{ block.settings.tab_icon | img_url: '100x100' }}" 
+          class="{% if forloop.first %}active{% endif %}" 
+          data-index="{{ forloop.index0 }}"
+        >
+      {% endfor %}
+    </div>
+
+    {% for block in section.blocks %}
+      <div class="routine-content" data-tab="{{ forloop.index0 }}" {% unless forloop.first %}style="display:none"{% endunless %}>
+        <h2 class="routine-title">{{ block.settings.tab_title }}</h2>
+        <p class="routine-description">{{ block.settings.tab_description }}</p>
+        <a class="routine-btn">{{ section.settings.button_label }}</a>
+      </div>
+    {% endfor %}
   </div>
 
-  <!-- RIGHT COLUMN -->
-  <div class="kiko-right">
-
-      <div class="kiko-top-img">
-        {% if section.settings.top_image %}
-          <img src="{{ section.settings.top_image | image_url: width: 1200 }}" alt="">
-        {% endif %}
-      </div>
-
-      <div class="kiko-bottom-row">
-
-        <div class="kiko-bottom-img">
-          {% if section.settings.bottom_left %}
-            <img src="{{ section.settings.bottom_left | image_url: width: 800 }}" alt="">
-          {% endif %}
+  <div class="routine-right">
+    {% for block in section.blocks %}
+      <div class="routine-images" data-tab-img="{{ forloop.index0 }}" {% unless forloop.first %}style="display:none"{% endunless %}>
+        <img src="{{ block.settings.main_image | img_url: '800x' }}">
+        <div class="routine-bottom-images">
+          <img src="{{ block.settings.img_bottom_left | img_url: '400x' }}">
+          <img src="{{ block.settings.img_bottom_right | img_url: '400x' }}">
         </div>
-
-        <div class="kiko-bottom-img">
-          {% if section.settings.bottom_right %}
-            <img src="{{ section.settings.bottom_right | image_url: width: 800 }}" alt="">
-          {% endif %}
-        </div>
-
       </div>
-
+    {% endfor %}
   </div>
-
 </div>
 
+<script>
+  const tabs = document.querySelectorAll('#routineSection .routine-tabs img');
+  const contents = document.querySelectorAll('#routineSection .routine-content');
+  const images = document.querySelectorAll('#routineSection .routine-images');
 
+  tabs.forEach((tab, i) => {
+    tab.addEventListener('click', () => {
 
-<style>
-.kiko-wrapper {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: 60px 40px;
-    gap: 60px;
-}
+      tabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
 
-/* LEFT SIDE */
-.kiko-left {
-    width: 45%;
-}
+      contents.forEach(c => c.style.display = 'none');
+      images.forEach(img => img.style.display = 'none');
 
-.kiko-title {
-    font-size: 42px;
-    font-weight: 700;
-    margin: 10px 0 20px;
-}
-
-.kiko-desc {
-    font-size: 16px;
-    margin-bottom: 25px;
-    line-height: 1.6;
-}
-
-.kiko-btn {
-    display: inline-block;
-    padding: 12px 28px;
-    font-size: 14px;
-    font-weight: 600;
-    border: 1px solid #000;
-    text-decoration: none;
-    transition: 0.2s;
-}
-
-.kiko-btn:hover {
-    background: #000;
-    color: #fff;
-}
-
-/* RIGHT SIDE */
-.kiko-right {
-    width: 55%;
-    display: flex;
-    flex-direction: column;
-    gap: 22px;
-}
-
-/* Top Image */
-.kiko-top-img img {
-    width: 100%;
-    height: 360px;
-    object-fit: cover;
-    border-radius: 20px;
-}
-
-/* Bottom Row */
-.kiko-bottom-row {
-    display: flex;
-    gap: 22px;
-}
-
-.kiko-bottom-img img {
-    width: 100%;
-    height: 280px;
-    object-fit: cover;
-    border-radius: 20px;
-}
-
-/* MOBILE RESPONSIVE */
-@media (max-width: 900px) {
-    .kiko-wrapper {
-        flex-direction: column;
-        padding: 40px 20px;
-    }
-
-    .kiko-left,
-    .kiko-right {
-        width: 100%;
-    }
-
-    .kiko-top-img img {
-        height: 280px;
-    }
-
-    .kiko-bottom-img img {
-        height: 220px;
-    }
-}
-</style>
+      contents[i].style.display = 'block';
+      images[i].style.display = 'block';
+    });
+  });
+</script>
