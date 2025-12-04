@@ -624,6 +624,7 @@
         "tab_XBeXpU": {
           "type": "tab",
           "settings": {
+            "tab_icon": "shopify://shop_images/wooden-toothbrushes-lined-up-against-a-green-background.jpg",
             "tab_title": "New Unlimited Routine Collection",
             "tab_description": "Foundation that lasts up to 24 hours* for a flawless base"
           }
@@ -631,6 +632,7 @@
         "tab_dyaaqM": {
           "type": "tab",
           "settings": {
+            "tab_icon": "shopify://shop_images/rack-of-womens-clothing.jpg",
             "tab_title": "New Unlimited Routine Collection",
             "tab_description": "Foundation that lasts up to 24 hours* for a flawless base"
           }
@@ -638,6 +640,7 @@
         "tab_WNwrAi": {
           "type": "tab",
           "settings": {
+            "tab_icon": "shopify://shop_images/studded-flats.jpg",
             "tab_title": "New Unlimited Routine Collection",
             "tab_description": "Foundation that lasts up to 24 hours* for a flawless base"
           }
