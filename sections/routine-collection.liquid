@@ -66,118 +66,54 @@
 {% endschema %}
 
 <style>
-  .routine-wrapper {
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    gap: 40px;
-    padding: 60px 0;
-    max-width: 1250px;
-    margin: auto;
-  }
-
-  /* ------------- LEFT COLUMN ------------- */
-  .routine-left {
-    flex: 1;
-    max-width: 45%;
-  }
-
-  .routine-tabs {
-    display: flex;
-    gap: 10px;
-    margin: 15px 0 25px;
-  }
-
-  .routine-tabs img {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    cursor: pointer;
-    border: 2px solid transparent;
-    transition: 0.2s ease;
-    object-fit: cover;
-  }
-
-  .routine-tabs img.active {
-    border-color: #000;
-  }
-
-  .routine-title {
-    font-size: 40px;
-    font-weight: 600;
-    line-height: 1.15;
-  }
-
-  .routine-description {
-    font-size: 16px;
-    margin: 15px 0 25px;
-    max-width: 420px;
-  }
-
-  .routine-btn {
-    display: inline-block;
-    padding: 12px 28px;
-    background: #fff;
-    border-radius: 8px;
-    border: 1px solid #ddd;
-    font-weight: 600;
-    cursor: pointer;
-    transition: 0.2s;
-  }
-
-  .routine-btn:hover {
-    background: #f8f8f8;
-  }
-
-  /* ------------- RIGHT COLUMN ------------- */
   .routine-right {
     flex: 1;
     max-width: 50%;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
   }
 
-  .routine-right img {
+  /* TOP BIG IMAGE - fixed height */
+  .routine-right .routine-images > img {
     width: 100%;
-    border-radius: 16px;
+    height: 320px;
     object-fit: cover;
+    border-radius: 18px;
   }
 
+  /* BOTTOM TWO IMAGES */
   .routine-bottom-images {
     display: flex;
-    gap: 12px;
-    margin-top: 12px;
+    gap: 14px;
   }
 
   .routine-bottom-images img {
     width: 50%;
-    border-radius: 16px;
+    height: 260px;
     object-fit: cover;
+    border-radius: 18px;
   }
 
   /* Responsive */
   @media (max-width: 900px) {
-    .routine-wrapper {
-      flex-direction: column;
-      gap: 30px;
+    .routine-right .routine-images > img {
+      height: 240px;
     }
-    .routine-left, .routine-right {
-      max-width: 100%;
-    }
-    .routine-title {
-      font-size: 32px;
+    .routine-bottom-images img {
+      height: 200px;
     }
   }
 </style>
 
 <div class="routine-wrapper" id="routineSection">
-
   <!-- LEFT COLUMN -->
   <div class="routine-left">
-
     <p style="font-size:14px; font-weight:600;">{{ section.settings.small_heading }}</p>
 
     <div class="routine-tabs">
       {% for block in section.blocks %}
-        <img 
+        <img
           src="{{ block.settings.tab_icon | img_url: '100x100' }}"
           class="{% if forloop.first %}active{% endif %}"
           data-index="{{ forloop.index0 }}"
@@ -186,19 +122,30 @@
     </div>
 
     {% for block in section.blocks %}
-      <div class="routine-content" data-tab="{{ forloop.index0 }}" {% unless forloop.first %}style="display:none"{% endunless %}>
+      <div
+        class="routine-content"
+        data-tab="{{ forloop.index0 }}"
+        {% unless forloop.first %}
+          style="display:none"
+        {% endunless %}
+      >
         <h2 class="routine-title">{{ block.settings.tab_title }}</h2>
         <p class="routine-description">{{ block.settings.tab_description }}</p>
         <a class="routine-btn">{{ section.settings.button_label }}</a>
       </div>
     {% endfor %}
-
   </div>
 
   <!-- RIGHT COLUMN -->
   <div class="routine-right">
     {% for block in section.blocks %}
-      <div class="routine-images" data-tab-img="{{ forloop.index0 }}" {% unless forloop.first %}style="display:none"{% endunless %}>
+      <div
+        class="routine-images"
+        data-tab-img="{{ forloop.index0 }}"
+        {% unless forloop.first %}
+          style="display:none"
+        {% endunless %}
+      >
         <img src="{{ block.settings.main_image | img_url: '700x' }}">
         <div class="routine-bottom-images">
           <img src="{{ block.settings.img_bottom_left | img_url: '400x' }}">
@@ -207,7 +154,6 @@
       </div>
     {% endfor %}
   </div>
-
 </div>
 
 <script>
@@ -217,12 +163,11 @@
 
   tabs.forEach((tab, i) => {
     tab.addEventListener('click', () => {
-
-      tabs.forEach(t => t.classList.remove('active'));
+      tabs.forEach((t) => t.classList.remove('active'));
       tab.classList.add('active');
 
-      contents.forEach(c => c.style.display = 'none');
-      images.forEach(img => img.style.display = 'none');
+      contents.forEach((c) => (c.style.display = 'none'));
+      images.forEach((img) => (img.style.display = 'none'));
 
       contents[i].style.display = 'block';
       images[i].style.display = 'block';
