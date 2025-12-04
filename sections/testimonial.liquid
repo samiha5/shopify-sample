@@ -1,7 +1,10 @@
 {% comment %}
   testimonial-carousel.liquid
-  Simple, non-wrapping 3-up carousel (classic behavior)
-  Up to 6 editable testimonial cards.
+  Infinite wrap-around 3-up carousel (clone technique)
+  - Shows exactly 3 cards at once
+  - Wraps seamlessly (infinite)
+  - Center card scales up
+  - Up to 6 editable testimonial cards
 {% endcomment %}
 
 <section id="testimonial-carousel-{{ section.id }}" class="testimonial-carousel-section" data-section-id="{{ section.id }}">
@@ -11,18 +14,7 @@
     </button>
 
     <div class="carousel-viewport">
-      <div class="carousel-track">
-        {% if section.blocks.size == 0 %}
-          <div class="carousel-card">
-            <div class="card-image" style="background-image: url('//placehold.co/800x450')"></div>
-            <div class="card-body">
-              <p class="card-quote">This is a default testimonial. Replace in the customizer.</p>
-              <p class="card-title">Default Name</p>
-              <p class="card-subtitle">Default role</p>
-            </div>
-          </div>
-        {% endif %}
-
+      <div class="carousel-track-original" style="display:none;">
         {% for block in section.blocks %}
           <div class="carousel-card" data-index="{{ forloop.index0 }}">
             <div class="card-image">
@@ -32,7 +24,6 @@
                 <img src="//placehold.co/800x450" alt="placeholder">
               {% endif %}
             </div>
-
             <div class="card-body">
               <p class="card-quote">{{ block.settings.quote | default: "The service was absolutely impeccable. I will come back again." }}</p>
               <p class="card-title">{{ block.settings.title | default: "Firstname L." }}</p>
@@ -40,6 +31,25 @@
             </div>
           </div>
         {% endfor %}
+      </div>
+
+      <div class="carousel-track" aria-live="polite">
+        {% comment %}
+          JS will populate the visible track by cloning nodes from .carousel-track-original
+          If there are no blocks, create three fallback cards so carousel still works.
+        {% endcomment %}
+        {% if section.blocks.size == 0 %}
+          {% for i in (1..6) %}
+          <div class="carousel-card" data-index="{{ i }}">
+            <div class="card-image"><img src="//placehold.co/800x450" alt="placeholder"></div>
+            <div class="card-body">
+              <p class="card-quote">Default testimonial placeholder.</p>
+              <p class="card-title">Firstname L.</p>
+              <p class="card-subtitle">Default role</p>
+            </div>
+          </div>
+          {% endfor %}
+        {% endif %}
       </div>
     </div>
 
@@ -49,51 +59,17 @@
   </div>
 
   <style>
-    /* container vars */
-    #testimonial-carousel-{{ section.id }} { padding: 40px 0; --card-width: 280px; --card-height: 420px; --gap: 28px; }
-    .testimonial-carousel-section .carousel-inner {
-      display:flex; align-items:center; gap:16px; position:relative; justify-content:center;
-      max-width:1200px; margin:0 auto;
-    }
+    #testimonial-carousel-{{ section.id }} { padding: 40px 0; --card-width: 280px; --card-height: 420px; --gap: 24px; }
+    .testimonial-carousel-section .carousel-inner { display:flex; align-items:center; gap:16px; position:relative; justify-content:center; max-width:1200px; margin:0 auto; }
 
-    .carousel-arrow {
-      background: white;
-      border-radius: 50%;
-      width:44px; height:44px;
-      display:flex; align-items:center; justify-content:center;
-      box-shadow: 0 6px 18px rgba(18,18,18,0.06);
-      border: none; cursor:pointer;
-    }
+    .carousel-arrow { background:white; border-radius:50%; width:44px; height:44px; display:flex; align-items:center; justify-content:center; box-shadow: 0 6px 18px rgba(18,18,18,0.06); border:none; cursor:pointer; }
     .carousel-arrow[disabled] { opacity:.45; pointer-events:none; cursor:default; }
     .carousel-arrow svg { color:#222; }
 
-    .carousel-viewport {
-      overflow:hidden;
-      width: calc( (var(--card-width) * 3) + (var(--gap) * 2) );
-    }
+    .carousel-viewport { overflow:hidden; width: calc( (var(--card-width) * 3) + (var(--gap) * 2) ); }
+    .carousel-track { display:flex; gap: var(--gap); align-items:flex-start; transition: transform 420ms cubic-bezier(.2,.9,.2,1); will-change: transform; padding: 12px 0; }
 
-    .carousel-track {
-      display:flex;
-      gap: var(--gap);
-      align-items:flex-start;
-      transition: transform 420ms cubic-bezier(.2,.9,.2,1);
-      will-change: transform;
-      padding: 10px 0;
-    }
-
-    .carousel-card {
-      width: var(--card-width);
-      height: var(--card-height);
-      background:#fff;
-      border-radius:14px;
-      box-shadow: 0 6px 16px rgba(20,20,20,0.06);
-      overflow:hidden;
-      display:flex;
-      flex-direction:column;
-      transition: transform 420ms cubic-bezier(.2,.9,.2,1), box-shadow 420ms;
-      transform-origin: center bottom;
-      flex-shrink:0;
-    }
+    .carousel-card { width: var(--card-width); height: var(--card-height); background:#fff; border-radius:14px; box-shadow: 0 6px 16px rgba(20,20,20,0.06); overflow:hidden; display:flex; flex-direction:column; transition: transform 420ms cubic-bezier(.2,.9,.2,1), box-shadow 420ms; transform-origin:center bottom; flex-shrink:0; }
 
     .card-image { flex:0 0 48%; background:#f5f5f5; display:flex; align-items:center; justify-content:center; overflow:hidden; }
     .card-image img { width:100%; height:100%; object-fit:cover; display:block; }
@@ -107,57 +83,104 @@
     .carousel-card.side { transform: scale(0.98); z-index:2; opacity:0.98; }
     .carousel-card.hidden { transform: scale(0.92); opacity:0.35; filter: blur(.2px); z-index:1; }
 
-    @media (max-width:900px) {
-      #testimonial-carousel-{{ section.id }} { --card-width:240px; --card-height:380px; }
-      .carousel-viewport { width: calc( (var(--card-width) * 3) + (var(--gap) * 2) ); }
-    }
-    @media (max-width:640px) {
-      #testimonial-carousel-{{ section.id }} { padding:24px 0; --card-width:200px; --card-height:340px; }
-      .carousel-arrow { display:none; }
-      .carousel-viewport { width:100%; }
-      .carousel-track { padding:6px; }
-    }
+    @media (max-width:900px) { #testimonial-carousel-{{ section.id }} { --card-width: 240px; --card-height:380px; } .carousel-viewport { width: calc( (var(--card-width) * 3) + (var(--gap) * 2) ); } }
+    @media (max-width:640px) { #testimonial-carousel-{{ section.id }} { padding:24px 0; --card-width:200px; --card-height:340px; } .carousel-arrow { display:none; } .carousel-viewport { width:100%; } .carousel-track { padding:6px; } }
   </style>
 
   <script>
     (function(){
       const root = document.getElementById('testimonial-carousel-{{ section.id }}');
       if (!root) return;
+      const originalContainer = root.querySelector('.carousel-track-original');
       const track = root.querySelector('.carousel-track');
-      const cards = Array.from(root.querySelectorAll('.carousel-card'));
       const leftBtn = root.querySelector('.carousel-arrow-left');
       const rightBtn = root.querySelector('.carousel-arrow-right');
-      const total = cards.length;
+
+      // gather original cards (if originalContainer used) OR take what's already inside track
+      let originals = Array.from(originalContainer && originalContainer.children && originalContainer.children.length ? originalContainer.children : root.querySelectorAll('.carousel-track > .carousel-card'));
+      // if there were no originals in originalContainer, but track contains placeholders, use those as originals
+      if (!originals.length) originals = Array.from(track.children);
+
+      const total = originals.length;
       if (total === 0) return;
 
-      // leftIndex = index of left-most visible card. Range: [0, total - 3]
-      let leftIndex = 0;
-      const maxLeft = Math.max(0, total - 3);
+      // number of clones on each side (we show 3 at once, so clone 3 to be safe)
+      const cloneCount = Math.min(3, total); // don't clone more than total
+      let isTransitioning = false;
 
+      // helper to create a node clone that preserves inner HTML and data-index
+      function cloneNode(node, copyIndex) {
+        const clone = node.cloneNode(true);
+        // mark as clone for debugging
+        clone.classList.add('clone');
+        // keep the same data-index attribute (original logical index)
+        return clone;
+      }
+
+      // clear track and build: [last-clones...] [originals...] [first-clones...]
+      function buildTrack() {
+        track.innerHTML = '';
+        // append last clones (in same order as originals' end)
+        for (let i = total - cloneCount; i < total; i++) {
+          const n = cloneNode(originals[i % total]);
+          track.appendChild(n);
+        }
+        // append originals
+        originals.forEach(n => track.appendChild(n.cloneNode(true)));
+        // append first clones
+        for (let i = 0; i < cloneCount; i++) {
+          const n = cloneNode(originals[i]);
+          track.appendChild(n);
+        }
+      }
+
+      buildTrack();
+
+      // position index points to left-most visible card within the whole built track
+      // initial left-most should be at the first original (which is at index = cloneCount)
+      let positionIndex = cloneCount; // left-most card index within track (including clones)
+      // total nodes in built track:
+      let builtCount = track.children.length;
+
+      // compute gap from CSS and card full width
       function getGap() {
         const cs = getComputedStyle(track);
-        return parseFloat(cs.gap || '28') || 28;
+        return parseFloat(cs.gap || '24') || 24;
       }
       function fullCardWidth() {
-        if (!cards[0]) return 0;
-        return cards[0].getBoundingClientRect().width + getGap();
+        const card = track.children[0];
+        if (!card) return 0;
+        const w = card.getBoundingClientRect().width;
+        return w + getGap();
       }
 
-      function updateTransform(animate = true) {
+      // sets transform based on positionIndex (left-most visible card)
+      function setTransform(animate = true) {
         const full = fullCardWidth();
-        const offset = - (leftIndex * full);
+        const offset = - (positionIndex * full);
         if (!animate) track.style.transition = 'none';
         else track.style.transition = '';
         track.style.transform = `translateX(${offset}px)`;
         if (!animate) void track.offsetHeight;
+        // update classes for visible items (map visible window to original indices)
+        updateVisualClasses();
+      }
+
+      // map a built-track child index to logical original index (0..total-1)
+      function logicalIndexFromBuilt(builtIdx) {
+        // built structure: [last-clones(0..cloneCount-1)] [originals(total)] [first-clones(0..cloneCount-1)]
+        // the original logical index is (builtIndex - cloneCount) mod total, but adjust for clones and negatives
+        const idx = (builtIdx - cloneCount) % total;
+        return (idx + total) % total;
       }
 
       function updateVisualClasses() {
-        cards.forEach((c, i) => {
+        const children = Array.from(track.children);
+        children.forEach((c, i) => {
           c.classList.remove('center','side','hidden');
-          if (i >= leftIndex && i <= leftIndex + 2) {
-            // visible window
-            if (i === leftIndex + 1) c.classList.add('center');
+          // visible window: positionIndex .. positionIndex+2
+          if (i >= positionIndex && i <= positionIndex + 2) {
+            if (i === positionIndex + 1) c.classList.add('center');
             else c.classList.add('side');
           } else {
             c.classList.add('hidden');
@@ -165,54 +188,75 @@
         });
       }
 
-      function updateArrows() {
-        if (leftBtn) leftBtn.disabled = (leftIndex <= 0);
-        if (rightBtn) rightBtn.disabled = (leftIndex >= maxLeft);
+      // navigation functions
+      function next() {
+        if (isTransitioning) return;
+        isTransitioning = true;
+        positionIndex++;
+        setTransform(true);
+      }
+      function prev() {
+        if (isTransitioning) return;
+        isTransitioning = true;
+        positionIndex--;
+        setTransform(true);
       }
 
-      function goToLeft(index) {
-        leftIndex = Math.max(0, Math.min(maxLeft, index));
-        updateTransform();
-        updateVisualClasses();
-        updateArrows();
-      }
+      // handle wrapping: when transition ends check if we've moved into clones and teleport
+      track.addEventListener('transitionend', function() {
+        isTransitioning = false;
+        // if we've moved right beyond the last original (into first-clones)
+        if (positionIndex >= cloneCount + total) {
+          // teleport back to the same logical window in the originals
+          positionIndex = positionIndex - total;
+          setTransform(false); // no animation
+        }
+        // if we've moved left beyond the first original (into last-clones area)
+        if (positionIndex < cloneCount) {
+          positionIndex = positionIndex + total;
+          setTransform(false);
+        }
+      });
 
-      function next() { goToLeft(leftIndex + 1); }
-      function prev() { goToLeft(leftIndex - 1); }
+      // init transform (no animation)
+      // slight timeout so DOM renders and widths available
+      setTimeout(()=> {
+        builtCount = track.children.length;
+        positionIndex = cloneCount;
+        setTransform(false);
+      }, 30);
 
-      // init
-      updateVisualClasses();
-      setTimeout(() => { updateTransform(false); updateArrows(); }, 20);
-
-      leftBtn && leftBtn.addEventListener('click', prev);
+      // attach buttons
       rightBtn && rightBtn.addEventListener('click', next);
+      leftBtn && leftBtn.addEventListener('click', prev);
 
-      // keyboard navigation
+      // keyboard
       root.tabIndex = 0;
-      root.addEventListener('keydown', function(e){
+      root.addEventListener('keydown', function(e) {
         if (e.key === 'ArrowLeft') prev();
         if (e.key === 'ArrowRight') next();
       });
 
-      // swipe
-      let startX = null, isTouch = false;
-      root.addEventListener('touchstart', (e)=> { isTouch = true; startX = e.touches[0].clientX; }, {passive:true});
-      root.addEventListener('touchend', (e)=> {
-        if (!isTouch) return;
+      // swipe support
+      let startX = 0, isTouching = false;
+      root.addEventListener('touchstart', (e) => { isTouching = true; startX = e.touches[0].clientX; }, {passive:true});
+      root.addEventListener('touchend', (e) => {
+        if (!isTouching) return;
         const endX = (e.changedTouches && e.changedTouches[0] && e.changedTouches[0].clientX) || startX;
         const dx = endX - startX;
         if (Math.abs(dx) > 30) {
           if (dx < 0) next(); else prev();
         }
-        isTouch = false; startX = null;
+        isTouching = false;
       }, {passive:true});
 
-      // on resize recompute
+      // on resize recompute sizes and restore invisibly
       let resizeTimer;
       window.addEventListener('resize', function(){
         clearTimeout(resizeTimer);
-        resizeTimer = setTimeout(()=> { updateTransform(false); }, 120);
+        resizeTimer = setTimeout(function(){ setTransform(false); }, 120);
       });
+
     })();
   </script>
 
