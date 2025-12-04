@@ -1,0 +1,307 @@
+{% comment %}
+  testimonial-carousel.liquid
+  - 6 editable blocks (image, title, role, quote)
+  - Shows 3 cards at a time (prev / center / next)
+  - Center card scales up; transitions back when changed
+  - Simple JS-driven carousel (no external libs)
+{% endcomment %}
+
+<section id="testimonial-carousel-{{ section.id }}" class="testimonial-carousel-section" data-section-id="{{ section.id }}">
+  <div class="carousel-inner">
+    <button class="carousel-arrow carousel-arrow-left" aria-label="Previous">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+
+    <div class="carousel-viewport">
+      <div class="carousel-track">
+        {% if section.blocks.size == 0 %}
+          <!-- In case no blocks exist, we still add one fallback card -->
+          <div class="carousel-card">
+            <div class="card-image" style="background-image: url('//placehold.co/800x450')"></div>
+            <div class="card-body">
+              <p class="card-quote">This is a default testimonial. Replace in the customizer.</p>
+              <p class="card-title">Default Name</p>
+              <p class="card-subtitle">Default role</p>
+            </div>
+          </div>
+        {% endif %}
+
+        {% for block in section.blocks %}
+          <div class="carousel-card" data-index="{{ forloop.index0 }}">
+            <div class="card-image">
+              {% if block.settings.image != blank %}
+                <img src="{{ block.settings.image | img_url: '800x' }}" alt="{{ block.settings.title | escape }}">
+              {% else %}
+                <img src="//placehold.co/800x450" alt="placeholder">
+              {% endif %}
+            </div>
+
+            <div class="card-body">
+              <p class="card-quote">{{ block.settings.quote | default: "The service was absolutely impeccable. I will come back again." }}</p>
+              <p class="card-title">{{ block.settings.title | default: "Firstname L." }}</p>
+              <p class="card-subtitle">{{ block.settings.role | default: "Happy customer, city" }}</p>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <button class="carousel-arrow carousel-arrow-right" aria-label="Next">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+  </div>
+
+  <style>
+    /* Container */
+    #testimonial-carousel-{{ section.id }} { padding: 40px 0; --card-width: 280px; --card-height: 420px; --gap: 28px; }
+    .testimonial-carousel-section .carousel-inner {
+      display:flex; align-items:center; gap:16px; position:relative; justify-content:center;
+      max-width:1200px; margin:0 auto;
+    }
+
+    /* Arrows */
+    .carousel-arrow {
+      background: white;
+      border-radius: 50%;
+      width:44px; height:44px;
+      display:flex; align-items:center; justify-content:center;
+      box-shadow: 0 6px 18px rgba(18,18,18,0.06);
+      border: none; cursor:pointer;
+    }
+    .carousel-arrow svg { color: #222; }
+
+    .carousel-viewport {
+      overflow: hidden;
+      width: calc( (var(--card-width) * 3) + (var(--gap) * 2) + 40px ); /* show exactly 3 cards */
+    }
+
+    .carousel-track {
+      display:flex;
+      gap: var(--gap);
+      align-items:flex-start;
+      transition: transform 450ms cubic-bezier(.2,.9,.2,1);
+      will-change: transform;
+      padding: 10px 20px;
+    }
+
+    /* Card base */
+    .carousel-card {
+      width: var(--card-width);
+      height: var(--card-height);
+      background: #fff;
+      border-radius: 14px;
+      box-shadow: 0 6px 16px rgba(20,20,20,0.06);
+      overflow: hidden;
+      display:flex;
+      flex-direction:column;
+      transition: transform 420ms cubic-bezier(.2,.9,.2,1), box-shadow 420ms;
+      transform-origin: center bottom;
+      flex-shrink: 0;
+    }
+
+    /* Image takes approximately the top half */
+    .card-image { flex: 0 0 48%; position:relative; background: #f5f5f5; display:flex; align-items:center; justify-content:center; overflow:hidden; }
+    .card-image img { width:100%; height:100%; object-fit:cover; display:block; }
+
+    .card-body { flex:1; padding: 20px; display:flex; flex-direction:column; justify-content:center; text-align:center; gap:10px; }
+    .card-quote { font-size: 14px; line-height:1.45; color:#222; margin:0 12px; min-height:56px; }
+    .card-title { font-weight:700; margin-top:8px; font-size:14px; }
+    .card-subtitle { font-size:12px; color:#777; margin-top:4px; }
+
+    /* Small visual differences for prev/next/center */
+    .carousel-card.center {
+      transform: scale(1.08);
+      box-shadow: 0 20px 40px rgba(18,18,18,0.12);
+      z-index: 3;
+    }
+    .carousel-card.prev,
+    .carousel-card.next {
+      transform: scale(0.98);
+      z-index: 2;
+      opacity: 0.98;
+    }
+
+    /* Hidden cards that are not in the 3-front window become slightly faded and smaller */
+    .carousel-card.hidden {
+      transform: scale(0.92);
+      opacity: 0.35;
+      filter: blur(.2px);
+      z-index: 1;
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      #testimonial-carousel-{{ section.id }} { --card-width: 240px; --card-height: 380px; }
+      .carousel-viewport { width: calc( (var(--card-width) * 3) + (var(--gap) * 2) + 8px ); }
+    }
+    @media (max-width: 640px) {
+      #testimonial-carousel-{{ section.id }} { padding: 24px 0; --card-width: 200px; --card-height: 340px; }
+      .carousel-arrow { display:none; } /* hide arrows on small screens (touch swipe will work) */
+      .carousel-viewport { width: 100%; }
+      .carousel-track { padding: 6px; }
+    }
+  </style>
+
+  <script>
+    (function() {
+      const root = document.getElementById('testimonial-carousel-{{ section.id }}');
+      if (!root) return;
+      const track = root.querySelector('.carousel-track');
+      const cards = Array.from(root.querySelectorAll('.carousel-card'));
+      const leftBtn = root.querySelector('.carousel-arrow-left');
+      const rightBtn = root.querySelector('.carousel-arrow-right');
+
+      const total = cards.length;
+      if (total === 0) return;
+
+      // initial index: center on the middle card if possible, otherwise 0
+      let currentIndex = Math.floor(total / 2); // center by default
+      // ensure index in bounds
+      currentIndex = Math.max(0, Math.min(total - 1, currentIndex));
+
+      // compute card width (including gap)
+      function cardFullWidth() {
+        const computed = getComputedStyle(cards[0]);
+        const w = cards[0].getBoundingClientRect().width;
+        const gap = parseFloat(getComputedStyle(cards[0].parentElement).gap || '28') || 28;
+        return w + gap;
+      }
+
+      function clamp(i) {
+        // wrap-around behavior
+        if (i < 0) return (total - 1);
+        if (i >= total) return 0;
+        return i;
+      }
+
+      function updateClasses() {
+        cards.forEach((c, i) => {
+          c.classList.remove('center','prev','next','hidden');
+          if (i === currentIndex) c.classList.add('center');
+          else if (i === clamp(currentIndex - 1)) c.classList.add('prev');
+          else if (i === clamp(currentIndex + 1)) c.classList.add('next');
+          else c.classList.add('hidden');
+        });
+      }
+
+      function updatePosition(animate = true) {
+        const full = cardFullWidth();
+        // We want the currentIndex card centered in the viewport which shows 3 cards.
+        // Compute how far to move the track: the left-most visible card should be (currentIndex - 1)
+        // track transform = - (full * (currentIndex - 1)) + offsetToCenter
+        // To avoid weird offsets, center the center card in the middle of viewport.
+        const viewport = root.querySelector('.carousel-viewport');
+        const viewportWidth = viewport.getBoundingClientRect().width;
+        const cardWidth = cards[0].getBoundingClientRect().width;
+        const targetCenter = (viewportWidth / 2) - (cardWidth / 2); // px from left
+        const trackOffset = -((full * currentIndex) - targetCenter);
+        if (!animate) {
+          track.style.transition = 'none';
+        } else {
+          track.style.transition = '';
+        }
+        track.style.transform = 'translateX(' + (trackOffset) + 'px)';
+        // force reflow if transition disabled
+        if (!animate) void track.offsetHeight;
+      }
+
+      function goTo(index) {
+        currentIndex = clamp(index);
+        updateClasses();
+        updatePosition();
+      }
+
+      function next() {
+        goTo(currentIndex + 1);
+      }
+      function prev() {
+        goTo(currentIndex - 1);
+      }
+
+      // set up initial
+      updateClasses();
+      // Wait a tick so layout measured correctly
+      setTimeout(() => updatePosition(false), 30);
+
+      leftBtn && leftBtn.addEventListener('click', function(){ prev(); });
+      rightBtn && rightBtn.addEventListener('click', function(){ next(); });
+
+      // keyboard left/right
+      root.tabIndex = 0;
+      root.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowLeft') prev();
+        if (e.key === 'ArrowRight') next();
+      });
+
+      // swipe support (basic)
+      let startX = null;
+      let isTouching = false;
+      root.addEventListener('touchstart', function(e) {
+        isTouching = true;
+        startX = e.touches[0].clientX;
+      }, {passive:true});
+      root.addEventListener('touchmove', function(e) {
+        if (!isTouching) return;
+        const dx = e.touches[0].clientX - startX;
+        // optional: small drag effect (not required)
+      }, {passive:true});
+      root.addEventListener('touchend', function(e) {
+        if (!isTouching) return;
+        const endX = (e.changedTouches && e.changedTouches[0] && e.changedTouches[0].clientX) || startX;
+        const dx = endX - startX;
+        if (Math.abs(dx) > 30) {
+          if (dx < 0) next();
+          else prev();
+        }
+        isTouching = false;
+        startX = null;
+      });
+
+      // on window resize reposition without animation
+      let resizeTimer;
+      window.addEventListener('resize', function(){
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(function(){ updatePosition(false); }, 120);
+      });
+
+      // Optional: autoplay (commented out)
+      // let autoplay = setInterval(next, 5000);
+      // root.addEventListener('mouseenter', ()=> clearInterval(autoplay));
+      // root.addEventListener('mouseleave', ()=> autoplay = setInterval(next, 5000));
+    })();
+  </script>
+
+  {% schema %}
+  {
+    "name": "Testimonials Carousel",
+    "settings": [],
+    "blocks": [
+      {
+        "type": "card",
+        "name": "Testimonial card",
+        "settings": [
+          { "type": "image_picker", "id": "image", "label": "Image" },
+          { "type": "text", "id": "title", "label": "Name", "default": "Firstname L." },
+          { "type": "text", "id": "role", "label": "Role / Location", "default": "Happy customer, City" },
+          { "type": "textarea", "id": "quote", "label": "Quote", "default": "The service was absolutely impeccable. I will come back again!" }
+        ]
+      }
+    ],
+    "max_blocks": 6,
+    "presets": [
+      {
+        "name": "Testimonials carousel",
+        "category": "Testimonials",
+        "blocks": [
+          { "type": "card", "settings": { "title":"Alex R.","role":"Seattle, WA","quote":"Amazing experience, couldn't recommend more.","image":"" } },
+          { "type": "card", "settings": { "title":"Priya S.","role":"Lahore, PK","quote":"Exceptional service and friendly staff.","image":"" } },
+          { "type": "card", "settings": { "title":"Marcus T.","role":"Berlin, DE","quote":"Top notch quality and fast delivery.","image":"" } },
+          { "type": "card", "settings": { "title":"Rita K.","role":"NYC, USA","quote":"We come here every season — superb.","image":"" } },
+          { "type": "card", "settings": { "title":"Omar N.","role":"Dubai","quote":"They went above and beyond.","image":"" } },
+          { "type": "card", "settings": { "title":"Li W.","role":"Shanghai","quote":"Perfect from start to finish.","image":"" } }
+        ]
+      }
+    ]
+  }
+  {% endschema %}
+</section>
