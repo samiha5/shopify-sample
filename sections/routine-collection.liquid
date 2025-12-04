@@ -68,69 +68,55 @@
 <style>
   .routine-wrapper {
     display: flex;
-    justify-content: space-between;
-    gap: 30px;
-    padding: 40px 0;
-    align-items: center;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 40px;
+    padding: 60px 0;
+    max-width: 1250px;
+    margin: auto;
   }
 
+  /* ------------- LEFT COLUMN ------------- */
   .routine-left {
-    width: 45%;
-  }
-
-  .routine-right {
-    width: 50%;
+    flex: 1;
+    max-width: 45%;
   }
 
   .routine-tabs {
     display: flex;
-    gap: 8px;
-    margin: 15px 0;
+    gap: 10px;
+    margin: 15px 0 25px;
   }
 
   .routine-tabs img {
-    width: 45px;
-    height: 45px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     cursor: pointer;
     border: 2px solid transparent;
-    transition: 0.2s;
+    transition: 0.2s ease;
+    object-fit: cover;
   }
 
   .routine-tabs img.active {
-    border-color: black;
+    border-color: #000;
   }
 
   .routine-title {
-    font-size: 48px;
+    font-size: 40px;
     font-weight: 600;
-    line-height: 1.1;
+    line-height: 1.15;
   }
 
   .routine-description {
     font-size: 16px;
     margin: 15px 0 25px;
-  }
-
-  .routine-right img {
-    width: 100%;
-    border-radius: 18px;
-  }
-
-  .routine-bottom-images {
-    display: flex;
-    margin-top: 15px;
-    gap: 15px;
-  }
-
-  .routine-bottom-images img {
-    width: 50%;
-    border-radius: 18px;
+    max-width: 420px;
   }
 
   .routine-btn {
     display: inline-block;
-    padding: 12px 30px;
+    padding: 12px 28px;
     background: #fff;
     border-radius: 8px;
     border: 1px solid #ddd;
@@ -140,11 +126,51 @@
   }
 
   .routine-btn:hover {
-    background: #f7f7f7;
+    background: #f8f8f8;
+  }
+
+  /* ------------- RIGHT COLUMN ------------- */
+  .routine-right {
+    flex: 1;
+    max-width: 50%;
+  }
+
+  .routine-right img {
+    width: 100%;
+    border-radius: 16px;
+    object-fit: cover;
+  }
+
+  .routine-bottom-images {
+    display: flex;
+    gap: 12px;
+    margin-top: 12px;
+  }
+
+  .routine-bottom-images img {
+    width: 50%;
+    border-radius: 16px;
+    object-fit: cover;
+  }
+
+  /* Responsive */
+  @media (max-width: 900px) {
+    .routine-wrapper {
+      flex-direction: column;
+      gap: 30px;
+    }
+    .routine-left, .routine-right {
+      max-width: 100%;
+    }
+    .routine-title {
+      font-size: 32px;
+    }
   }
 </style>
 
 <div class="routine-wrapper" id="routineSection">
+
+  <!-- LEFT COLUMN -->
   <div class="routine-left">
 
     <p style="font-size:14px; font-weight:600;">{{ section.settings.small_heading }}</p>
@@ -152,8 +178,8 @@
     <div class="routine-tabs">
       {% for block in section.blocks %}
         <img 
-          src="{{ block.settings.tab_icon | img_url: '100x100' }}" 
-          class="{% if forloop.first %}active{% endif %}" 
+          src="{{ block.settings.tab_icon | img_url: '100x100' }}"
+          class="{% if forloop.first %}active{% endif %}"
           data-index="{{ forloop.index0 }}"
         >
       {% endfor %}
@@ -166,12 +192,14 @@
         <a class="routine-btn">{{ section.settings.button_label }}</a>
       </div>
     {% endfor %}
+
   </div>
 
+  <!-- RIGHT COLUMN -->
   <div class="routine-right">
     {% for block in section.blocks %}
       <div class="routine-images" data-tab-img="{{ forloop.index0 }}" {% unless forloop.first %}style="display:none"{% endunless %}>
-        <img src="{{ block.settings.main_image | img_url: '800x' }}">
+        <img src="{{ block.settings.main_image | img_url: '700x' }}">
         <div class="routine-bottom-images">
           <img src="{{ block.settings.img_bottom_left | img_url: '400x' }}">
           <img src="{{ block.settings.img_bottom_right | img_url: '400x' }}">
@@ -179,6 +207,7 @@
       </div>
     {% endfor %}
   </div>
+
 </div>
 
 <script>
