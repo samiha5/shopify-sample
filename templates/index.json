@@ -625,8 +625,11 @@
           "type": "tab",
           "settings": {
             "tab_icon": "shopify://shop_images/wooden-toothbrushes-lined-up-against-a-green-background.jpg",
-            "tab_title": "New Unlimited Routine Collection",
-            "tab_description": "Foundation that lasts up to 24 hours* for a flawless base"
+            "tab_title": "New Unlimited Brush Collection",
+            "tab_description": "It’s short, memorable, and positions the brush as more than just a tool—it’s a gateway to confident creativity.",
+            "main_image": "shopify://shop_images/wooden-toothbrushes-lined-up-against-a-green-background.jpg",
+            "img_bottom_left": "shopify://shop_images/paint-and-brush.jpg",
+            "img_bottom_right": "shopify://shop_images/makeup-powders-and-brush.jpg"
           }
         },
         "tab_dyaaqM": {
