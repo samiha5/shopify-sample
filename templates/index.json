@@ -617,6 +617,42 @@
       ],
       "name": "Testimonials carousel",
       "settings": {}
+    },
+    "routine_collection_mRimqw": {
+      "type": "routine-collection",
+      "blocks": {
+        "tab_XBeXpU": {
+          "type": "tab",
+          "settings": {
+            "tab_title": "New Unlimited Routine Collection",
+            "tab_description": "Foundation that lasts up to 24 hours* for a flawless base"
+          }
+        },
+        "tab_dyaaqM": {
+          "type": "tab",
+          "settings": {
+            "tab_title": "New Unlimited Routine Collection",
+            "tab_description": "Foundation that lasts up to 24 hours* for a flawless base"
+          }
+        },
+        "tab_WNwrAi": {
+          "type": "tab",
+          "settings": {
+            "tab_title": "New Unlimited Routine Collection",
+            "tab_description": "Foundation that lasts up to 24 hours* for a flawless base"
+          }
+        }
+      },
+      "block_order": [
+        "tab_XBeXpU",
+        "tab_dyaaqM",
+        "tab_WNwrAi"
+      ],
+      "name": "Routine Collection Tabs",
+      "settings": {
+        "small_heading": "WHAT’S NEW",
+        "button_label": "DISCOVER THE COLLECTION"
+      }
     }
   },
   "order": [
@@ -625,6 +661,7 @@
     "product_list_fa6P9H",
     "17628597425e79e558",
     "17628602738b153990",
-    "testimonial_N7Hb4g"
+    "testimonial_N7Hb4g",
+    "routine_collection_mRimqw"
   ]
 }
