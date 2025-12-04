@@ -641,8 +641,11 @@
           "type": "tab",
           "settings": {
             "tab_icon": "shopify://shop_images/studded-flats.jpg",
-            "tab_title": "New Unlimited Routine Collection",
-            "tab_description": "Foundation that lasts up to 24 hours* for a flawless base"
+            "tab_title": "New Comfortable show Collection",
+            "tab_description": "Shoes that are comfortable yet stylish . Elevate your fashion!",
+            "main_image": "shopify://shop_images/studded-flats.jpg",
+            "img_bottom_left": "shopify://shop_images/silver-wingtip-shoes-on-silver-background.jpg",
+            "img_bottom_right": "shopify://shop_images/mens-dress-shoes.jpg"
           }
         }
       },
