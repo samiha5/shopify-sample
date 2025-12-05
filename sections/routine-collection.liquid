@@ -15,7 +15,6 @@
       "default": "DISCOVER THE COLLECTION"
     }
   ],
-
   "blocks": [
     {
       "type": "tab",
@@ -56,7 +55,6 @@
       ]
     }
   ],
-
   "presets": [
     {
       "name": "Routine Collection Tabs"
@@ -66,121 +64,175 @@
 {% endschema %}
 
 <style>
+/* Container & layout */
+.routine-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center; /* vertically center left column relative to right images */
+  gap: 60px;
+  padding: 60px 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+/* LEFT COLUMN */
+.routine-left {
+  flex: 1 1 48%;
+  max-width: 48%;
+  min-width: 300px;
+}
+
+/* small top heading above icons */
+.routine-left .small-top {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: #222;
+  margin-bottom: 18px;
+}
+
+/* icons row */
+.routine-tabs {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  margin-bottom: 22px;
+}
+
+.routine-tabs img {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: 180ms ease;
+  object-fit: cover;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+}
+
+.routine-tabs img.active {
+  border-color: #111;
+  transform: translateY(-2px);
+}
+
+/* big title: responsive */
+.routine-title {
+  margin: 0 0 18px 0;
+  /* clamp: min 36px, ideal based on viewport, max 86px */
+  font-size: clamp(36px, 6.8vw, 86px);
+  font-weight: 700;
+  line-height: 0.98;
+  letter-spacing: -0.02em;
+  color: #111;
+  word-break: break-word;
+}
+
+/* description */
+.routine-description {
+  font-size: clamp(14px, 1.6vw, 18px);
+  margin: 8px 0 24px;
+  max-width: 520px;
+  color: #4b4b4b;
+}
+
+/* CTA */
+.routine-btn {
+  display: inline-block;
+  padding: 12px 28px;
+  background: #fff;
+  border-radius: 10px;
+  border: 1px solid #e3e3e3;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  text-decoration: none;
+  color: #111;
+  transition: transform .14s ease, box-shadow .14s ease;
+}
+
+.routine-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 26px rgba(0,0,0,0.12); }
+
+/* RIGHT COLUMN: use grid so top image is tall and bottom images share a row */
+.routine-right {
+  flex: 1 1 50%;
+  max-width: 50%;
+  min-width: 320px;
+  box-sizing: border-box;
+}
+
+/* wrapper for images per tab */
+.routine-images {
+  display: grid;
+  grid-template-rows: 2fr 1fr; /* main image twice the height of bottom row */
+  gap: 12px;
+}
+
+/* main image should cover area and keep proportion */
+.routine-images .main-image {
+  width: 100%;
+  height: 100%;
+  border-radius: 14px;
+  object-fit: cover;
+  display: block;
+}
+
+/* bottom row: two images side by side, equal height */
+.routine-bottom-images {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+/* bottom images */
+.routine-bottom-images img {
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  object-fit: cover;
+  display: block;
+}
+
+/* If any image is missing, ensure space doesn't collapse by setting min-height */
+.routine-images .main-image { min-height: 320px; }
+.routine-bottom-images img { min-height: 120px; }
+
+/* Responsive: stack columns on smaller screens */
+@media (max-width: 980px) {
   .routine-wrapper {
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    gap: 40px;
-    padding: 60px 0;
-    max-width: 1250px;
-    margin: auto;
+    flex-direction: column;
+    gap: 28px;
+    padding: 40px 18px;
   }
+  .routine-left, .routine-right { max-width: 100%; flex-basis: 100%; }
+  .routine-title { font-size: clamp(28px, 8.5vw, 48px); text-align: center; }
+  .routine-description { text-align: center; margin-left: auto; margin-right: auto; }
+  .routine-tabs { justify-content: center; }
+  .routine-images .main-image { min-height: 260px; }
+}
 
-  /* ------------- LEFT COLUMN ------------- */
-  .routine-left {
-    flex: 1;
-    max-width: 45%;
-  }
-
-  .routine-tabs {
-    display: flex;
-    gap: 10px;
-    margin: 15px 0 25px;
-  }
-
-  .routine-tabs img {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    cursor: pointer;
-    border: 2px solid transparent;
-    transition: 0.2s ease;
-    object-fit: cover;
-  }
-
-  .routine-tabs img.active {
-    border-color: #000;
-  }
-
-  .routine-title {
-    font-size: 40px;
-    font-weight: 600;
-    line-height: 1.15;
-  }
-
-  .routine-description {
-    font-size: 16px;
-    margin: 15px 0 25px;
-    max-width: 420px;
-  }
-
-  .routine-btn {
-    display: inline-block;
-    padding: 12px 28px;
-    background: #fff;
-    border-radius: 8px;
-    border: 1px solid #ddd;
-    font-weight: 600;
-    cursor: pointer;
-    transition: 0.2s;
-  }
-
-  .routine-btn:hover {
-    background: #f8f8f8;
-  }
-
-  /* ------------- RIGHT COLUMN ------------- */
-  .routine-right {
-    flex: 1;
-    max-width: 50%;
-  }
-
-  .routine-right img {
-    width: 100%;
-    border-radius: 16px;
-    object-fit: cover;
-  }
-
-  .routine-bottom-images {
-    display: flex;
-    gap: 12px;
-    margin-top: 12px;
-  }
-
-  .routine-bottom-images img {
-    width: 50%;
-    border-radius: 16px;
-    object-fit: cover;
-  }
-
-  /* Responsive */
-  @media (max-width: 900px) {
-    .routine-wrapper {
-      flex-direction: column;
-      gap: 30px;
-    }
-    .routine-left, .routine-right {
-      max-width: 100%;
-    }
-    .routine-title {
-      font-size: 32px;
-    }
-  }
+/* small refinements for very small phones */
+@media (max-width: 420px) {
+  .routine-tabs img { width: 48px; height: 48px; }
+  .routine-title { font-size: 30px; }
+  .routine-images .main-image { min-height: 200px; }
+  .routine-bottom-images img { min-height: 100px; }
+}
 </style>
 
 <div class="routine-wrapper" id="routineSection">
 
   <!-- LEFT COLUMN -->
   <div class="routine-left">
+    <p class="small-top">{{ section.settings.small_heading }}</p>
 
-    <p style="font-size:14px; font-weight:600;">{{ section.settings.small_heading }}</p>
-
-    <div class="routine-tabs">
+    <div class="routine-tabs" role="tablist">
       {% for block in section.blocks %}
         <img 
-          src="{{ block.settings.tab_icon | img_url: '100x100' }}"
+          src="{{ block.settings.tab_icon | img_url: '200x200' }}"
           class="{% if forloop.first %}active{% endif %}"
           data-index="{{ forloop.index0 }}"
+          alt="tab icon {{ forloop.index }}"
         >
       {% endfor %}
     </div>
@@ -189,20 +241,33 @@
       <div class="routine-content" data-tab="{{ forloop.index0 }}" {% unless forloop.first %}style="display:none"{% endunless %}>
         <h2 class="routine-title">{{ block.settings.tab_title }}</h2>
         <p class="routine-description">{{ block.settings.tab_description }}</p>
-        <a class="routine-btn">{{ section.settings.button_label }}</a>
+        <a class="routine-btn" href="#">{{ section.settings.button_label }}</a>
       </div>
     {% endfor %}
-
   </div>
 
   <!-- RIGHT COLUMN -->
   <div class="routine-right">
     {% for block in section.blocks %}
       <div class="routine-images" data-tab-img="{{ forloop.index0 }}" {% unless forloop.first %}style="display:none"{% endunless %}>
-        <img src="{{ block.settings.main_image | img_url: '700x' }}">
+        {% if block.settings.main_image != blank %}
+          <img class="main-image" src="{{ block.settings.main_image | img_url: '1200x' }}" alt="Main image {{ forloop.index }}">
+        {% else %}
+          <div class="main-image" style="background:#f3f3f3;border-radius:14px;"></div>
+        {% endif %}
+
         <div class="routine-bottom-images">
-          <img src="{{ block.settings.img_bottom_left | img_url: '400x' }}">
-          <img src="{{ block.settings.img_bottom_right | img_url: '400x' }}">
+          {% if block.settings.img_bottom_left != blank %}
+            <img src="{{ block.settings.img_bottom_left | img_url: '800x' }}" alt="bottom left {{ forloop.index }}">
+          {% else %}
+            <div style="background:#f6f6f6;border-radius:12px;"></div>
+          {% endif %}
+
+          {% if block.settings.img_bottom_right != blank %}
+            <img src="{{ block.settings.img_bottom_right | img_url: '800x' }}" alt="bottom right {{ forloop.index }}">
+          {% else %}
+            <div style="background:#f6f6f6;border-radius:12px;"></div>
+          {% endif %}
         </div>
       </div>
     {% endfor %}
@@ -211,21 +276,40 @@
 </div>
 
 <script>
-  const tabs = document.querySelectorAll('#routineSection .routine-tabs img');
-  const contents = document.querySelectorAll('#routineSection .routine-content');
-  const images = document.querySelectorAll('#routineSection .routine-images');
+(function(){
+  const section = document.getElementById('routineSection');
+  if (!section) return;
+
+  const tabs = section.querySelectorAll('.routine-tabs img');
+  const contents = section.querySelectorAll('.routine-content');
+  const images = section.querySelectorAll('.routine-images');
 
   tabs.forEach((tab, i) => {
     tab.addEventListener('click', () => {
-
+      // visuals
       tabs.forEach(t => t.classList.remove('active'));
       tab.classList.add('active');
 
+      // hide all contents/images
       contents.forEach(c => c.style.display = 'none');
       images.forEach(img => img.style.display = 'none');
 
-      contents[i].style.display = 'block';
-      images[i].style.display = 'block';
+      // show selected
+      if (contents[i]) contents[i].style.display = 'block';
+      if (images[i]) images[i].style.display = 'grid';
+      // smooth focus for accessibility
+      tab.setAttribute('aria-selected', 'true');
     });
   });
+
+  // make first visible by default (in case Shopify rendered differently)
+  if (tabs.length && contents.length && images.length) {
+    tabs.forEach((t, idx) => {
+      if (idx === 0) t.classList.add('active');
+      else t.classList.remove('active');
+    });
+    contents.forEach((c, idx) => c.style.display = (idx === 0 ? 'block' : 'none'));
+    images.forEach((im, idx) => im.style.display = (idx === 0 ? 'grid' : 'none'));
+  }
+})();
 </script>
