@@ -11,7 +11,6 @@
   data-section-id="{{ section.id }}"
 >
   <div class="carousel-inner">
-
     <!-- LEFT ARROW -->
     <button class="carousel-arrow carousel-arrow-left" aria-label="Previous">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -23,7 +22,6 @@
 
     <div class="carousel-viewport">
       <div class="carousel-track">
-
         {% if section.blocks.size == 0 %}
           {% for i in (1..6) %}
             <div class="carousel-card">
@@ -56,7 +54,6 @@
             </div>
           {% endfor %}
         {% endif %}
-
       </div>
     </div>
 
@@ -68,209 +65,222 @@
               stroke-linecap="round" stroke-linejoin="round" />
       </svg>
     </button>
-
   </div>
 
-<style>
-/* Outer Section */
-#testimonial-carousel-{{ section.id }} {
-  padding: 60px 0;
-  --card-width: 300px;
-  --card-height: 460px;
-  --gap: 80px; /* wider spacing like your reference */
-}
+  <style>
+    /* Outer Section */
+    #testimonial-carousel-{{ section.id }} {
+      padding: 60px 0;
+      --card-width: 300px;
+      --card-height: 460px;
+      --gap: 80px;
+    }
 
-/* Layout */
-.carousel-inner {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  gap: 60px; /* pushes arrows out */
-  max-width: 1280px;
-  margin: auto;
-}
+    /* Layout */
+    .carousel-inner {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      gap: 60px; /* pushes arrows out */
+      max-width: 1280px;
+      margin: auto;
+    }
 
-/* Arrows */
-.carousel-arrow {
-  width: 54px;
-  height: 54px;
-  border-radius: 50%;
-  background: #fff;
-  border: none;
-  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.10);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-}
+    /* Arrows */
+    .carousel-arrow {
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      background: #fff;
+      border: none;
+      box-shadow: 0 10px 26px rgba(0, 0, 0, 0.10);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
 
-.carousel-arrow svg {
-  stroke: #000;
-}
+    .carousel-arrow svg {
+      stroke: #000;
+    }
 
-.carousel-arrow[disabled] {
-  opacity: 0.25;
-}
+    .carousel-arrow[disabled] {
+      opacity: 0.25;
+    }
 
-/* Viewport */
-.carousel-viewport {
-  overflow: hidden;
-  width: calc(var(--card-width) * 3 + var(--gap) * 2);
-}
+    /* Viewport */
+    .carousel-viewport {
+      overflow: hidden;
+      width: calc(var(--card-width) * 3 + var(--gap) * 2);
+    }
 
-/* Track */
-.carousel-track {
-  display: flex;
-  gap: var(--gap);
-  transition: transform 400ms cubic-bezier(.25, .85, .25, 1);
-}
+    /* Track */
+    .carousel-track {
+      display: flex;
+      gap: var(--gap);
+      transition: transform 400ms cubic-bezier(.25, .85, .25, 1);
+    }
 
-/* Card */
-.carousel-card {
-  width: var(--card-width);
-  height: var(--card-height);
-  background: #ffffff;
-  border-radius: 20px;
-  overflow: hidden;
-  flex-shrink: 0;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
-  transition: transform 0.45s ease, box-shadow 0.45s ease;
-}
+    /* Card */
+    .carousel-card {
+      width: var(--card-width);
+      height: var(--card-height);
+      background: #ffffff;
+      border-radius: 20px;
+      overflow: hidden;
+      flex-shrink: 0;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+      transition: transform 0.45s ease, box-shadow 0.45s ease;
+    }
 
-/* 60% image ratio */
-.card-image {
-  height: 60%;
-  overflow: hidden;
-  background: #eee;
-}
+    /* 60% image ratio */
+    .card-image {
+      height: 60%;
+      overflow: hidden;
+      background: #eee;
+    }
 
-.card-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
+    .card-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
 
-/* Text */
-.card-body {
-  height: 40%;
-  padding: 20px 28px;
-  text-align: center;
-}
+    /* Text */
+    .card-body {
+      height: 40%;
+      padding: 20px 28px;
+      text-align: center;
+    }
 
-.card-quote {
-  font-size: 14px;
-  margin-bottom: 10px;
-  color: #222;
-}
+    .card-quote {
+      font-size: 14px;
+      margin-bottom: 10px;
+      color: #222;
+    }
 
-.card-title {
-  font-size: 15px;
-  font-weight: 700;
-  margin: 0;
-}
+    .card-title {
+      font-size: 15px;
+      font-weight: 700;
+      margin: 0;
+    }
 
-.card-subtitle {
-  font-size: 13px;
-  color: #777;
-  margin-top: 4px;
-}
+    .card-subtitle {
+      font-size: 13px;
+      color: #777;
+      margin-top: 4px;
+    }
 
-/* CENTER CARD LIFT - medium */
-.carousel-card.center {
-  transform: scale(1.16);
-  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.18);
-  z-index: 3;
-}
+    /* CENTER CARD LIFT - medium */
+    /* ACTIVE (CENTER) CARD */
+    .carousel-card.center {
+      transform: scale(1.16);
+      box-shadow: 0 18px 48px rgba(0, 0, 0, 0.18);
+      z-index: 3;
+      border-radius: 28px;       /* <- MORE ROUNDED ACTIVE CARD */
+      overflow: hidden;          /* keeps image inside curved corners */
+      transition:
+        transform 0.45s ease,
+        box-shadow 0.45s ease,
+        border-radius 0.35s ease;
+    }
 
-.carousel-card.side {
-  opacity: 0.92;
-  transform: scale(0.98);
-  z-index: 1;
-}
+    /* SIDE CARDS */
+    .carousel-card.side {
+      opacity: 0.92;
+      transform: scale(0.98);
+      z-index: 1;
+      border-radius: 20px;       /* default rounding */
+      transition:
+        transform 0.45s ease,
+        opacity 0.45s ease,
+        border-radius 0.35s ease;
+    }
 
-/* Mobile */
-@media (max-width: 640px) {
-  #testimonial-carousel-{{ section.id }} {
-    --card-width: 80vw;
-    --card-height: 420px;
-    --gap: 20px;
-  }
-  .carousel-inner {
-    gap: 20px;
-  }
-  .carousel-viewport {
-    width: 100%;
-  }
-}
-</style>
 
-<script>
-(function () {
-  const root = document.getElementById("testimonial-carousel-{{ section.id }}");
-  if (!root) return;
-
-  const track = root.querySelector(".carousel-track");
-  const cards = Array.from(root.querySelectorAll(".carousel-card"));
-  const leftBtn = root.querySelector(".carousel-arrow-left");
-  const rightBtn = root.querySelector(".carousel-arrow-right");
-
-  let leftIndex = 0;
-  const total = cards.length;
-
-  function getGap() {
-    return parseFloat(window.getComputedStyle(track).gap);
-  }
-
-  function fullCardWidth() {
-    return cards[0].getBoundingClientRect().width + getGap();
-  }
-
-  function updateCenter() {
-    const visible = Math.min(3, total);
-    const center = leftIndex + Math.floor(visible / 2);
-
-    cards.forEach((card, i) => {
-      card.classList.remove("center", "side");
-      if (i === center) {
-        card.classList.add("center");
-      } else if (i >= leftIndex && i < leftIndex + visible) {
-        card.classList.add("side");
+    /* Mobile */
+    @media (max-width: 640px) {
+      #testimonial-carousel-{{ section.id }} {
+        --card-width: 80vw;
+        --card-height: 420px;
+        --gap: 20px;
       }
-    });
-  }
+      .carousel-inner {
+        gap: 20px;
+      }
+      .carousel-viewport {
+        width: 100%;
+      }
+    }
+  </style>
 
-  function update() {
-    const full = fullCardWidth();
-    const visibleCount = Math.min(3, total);
-    const maxLeft = Math.max(0, total - visibleCount);
+  <script>
+    (function () {
+      const root = document.getElementById('testimonial-carousel-{{ section.id }}');
+      if (!root) return;
 
-    leftIndex = Math.max(0, Math.min(leftIndex, maxLeft));
-    track.style.transform = `translateX(${-leftIndex * full}px)`;
+      const track = root.querySelector('.carousel-track');
+      const cards = Array.from(root.querySelectorAll('.carousel-card'));
+      const leftBtn = root.querySelector('.carousel-arrow-left');
+      const rightBtn = root.querySelector('.carousel-arrow-right');
 
-    if (leftBtn) leftBtn.disabled = leftIndex === 0;
-    if (rightBtn) rightBtn.disabled = leftIndex >= maxLeft;
+      let leftIndex = 0;
+      const total = cards.length;
 
-    updateCenter();
-  }
+      function getGap() {
+        return parseFloat(window.getComputedStyle(track).gap);
+      }
 
-  leftBtn.addEventListener("click", () => {
-    leftIndex--;
-    update();
-  });
+      function fullCardWidth() {
+        return cards[0].getBoundingClientRect().width + getGap();
+      }
 
-  rightBtn.addEventListener("click", () => {
-    leftIndex++;
-    update();
-  });
+      function updateCenter() {
+        const visible = Math.min(3, total);
+        const center = leftIndex + Math.floor(visible / 2);
 
-  setTimeout(() => update(), 30);
+        cards.forEach((card, i) => {
+          card.classList.remove('center', 'side');
+          if (i === center) {
+            card.classList.add('center');
+          } else if (i >= leftIndex && i < leftIndex + visible) {
+            card.classList.add('side');
+          }
+        });
+      }
 
-  window.addEventListener("resize", () => setTimeout(update, 150));
-})();
-</script>
+      function update() {
+        const full = fullCardWidth();
+        const visibleCount = Math.min(3, total);
+        const maxLeft = Math.max(0, total - visibleCount);
 
-{% schema %}
+        leftIndex = Math.max(0, Math.min(leftIndex, maxLeft));
+        track.style.transform = `translateX(${-leftIndex * full}px)`;
+
+        if (leftBtn) leftBtn.disabled = leftIndex === 0;
+        if (rightBtn) rightBtn.disabled = leftIndex >= maxLeft;
+
+        updateCenter();
+      }
+
+      leftBtn.addEventListener('click', () => {
+        leftIndex--;
+        update();
+      });
+
+      rightBtn.addEventListener('click', () => {
+        leftIndex++;
+        update();
+      });
+
+      setTimeout(() => update(), 30);
+
+      window.addEventListener('resize', () => setTimeout(update, 150));
+    })();
+  </script>
+
+  {% schema %}
 {
   "name": "Testimonials Carousel",
   "settings": [],
@@ -294,5 +304,5 @@
     }
   ]
 }
-{% endschema %}
+  {% endschema %}
 </section>
