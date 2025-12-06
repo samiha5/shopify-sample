@@ -35,7 +35,7 @@
           "type": "textarea",
           "id": "tab_description",
           "label": "Description",
-          "default": "Foundation that lasts up to 24 hours* for a flawless base"
+          "default": "Default Description"
         },
         {
           "type": "image_picker",
@@ -64,7 +64,6 @@
 {% endschema %}
 
 <style>
-    /* Container & layout */
     .routine-wrapper {
       display: flex;
       justify-content: center;
@@ -76,7 +75,6 @@
       box-sizing: border-box;
     }
 
-    /* LEFT COLUMN */
     .routine-left {
       flex: 1 1 48%;
       max-width: 48%;
@@ -149,7 +147,6 @@
       box-shadow: 0 10px 26px rgba(0,0,0,0.12);
     }
 
-    /* RIGHT COLUMN — FIXED SHOE-COLLECTION SIZES */
     .routine-right {
       flex: 1 1 50%;
       max-width: 50%;
@@ -157,7 +154,6 @@
       box-sizing: border-box;
     }
 
-    /* Image wrapper */
     .routine-images {
       display: flex;
       flex-direction: column;
@@ -172,7 +168,6 @@
       display: block;
     }
 
-    /* BOTTOM ROW (2 images) */
     .routine-bottom-images {
       display: flex;
       gap: 12px;
@@ -180,7 +175,7 @@
 
     .routine-bottom-images img {
       width: 50%;
-      height: 260px; /* ← small images */
+      height: 260px;
       object-fit: cover;
       border-radius: 16px;
       display: block;
@@ -198,7 +193,6 @@
       flex-basis: 100%;
     }
 
-    /* NEW → center the small top heading */
     .routine-left .small-top {
       text-align: center;
     }
@@ -207,7 +201,6 @@
     .routine-description { text-align: center; margin-left: auto; margin-right: auto; }
     .routine-tabs { justify-content: center; }
 
-    /* NEW → center the button */
     .routine-btn {
       display: block;
       margin-left: auto;
@@ -223,7 +216,6 @@
     .routine-tabs img { width: 48px; height: 48px; }
     .routine-title { font-size: 30px; }
 
-    /* keep same centering on small phones too */
     .routine-left .small-top { text-align: center; }
     .routine-btn { margin-left: auto; margin-right: auto; }
 
@@ -312,23 +304,19 @@
 
     tabs.forEach((tab, i) => {
       tab.addEventListener('click', () => {
-        // visuals
         tabs.forEach((t) => t.classList.remove('active'));
         tab.classList.add('active');
 
-        // hide all contents/images
         contents.forEach((c) => (c.style.display = 'none'));
         images.forEach((img) => (img.style.display = 'none'));
 
-        // show selected
         if (contents[i]) contents[i].style.display = 'block';
         if (images[i]) images[i].style.display = 'grid';
-        // smooth focus for accessibility
+
         tab.setAttribute('aria-selected', 'true');
       });
     });
 
-    // make first visible by default (in case Shopify rendered differently)
     if (tabs.length && contents.length && images.length) {
       tabs.forEach((t, idx) => {
         if (idx === 0) t.classList.add('active');
