@@ -1,435 +1,189 @@
-{% comment %}
-  testimonial-carousel.liquid
-  Simple 3-up testimonial carousel (non-infinite)
-  - Shows up to 3 cards at a time, centered
-  - Arrows move by 1 card step
-  - Center card is scaled up
-{% endcomment %}
-
-<section
-  id="testimonial-carousel-{{ section.id }}"
-  class="testimonial-carousel-section"
-  data-section-id="{{ section.id }}"
->
-  <div class="carousel-inner">
-    <button class="carousel-arrow carousel-arrow-left" aria-label="Previous">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-    </button>
-
-    <div class="carousel-viewport">
-      <div class="carousel-track">
-        {% if section.blocks.size == 0 %}
-          {% for i in (1..6) %}
-            <div class="carousel-card" tabindex="0">
-              <div class="card-image">
-                <img src="//placehold.co/800x450" alt="placeholder">
-              </div>
-              <div class="card-body">
-                <p class="card-quote">Default testimonial. Replace this content in the theme editor.</p>
-                <p class="card-title">Firstname L.</p>
-                <p class="card-subtitle">City, Country</p>
-              </div>
-            </div>
-          {% endfor %}
-        {% else %}
-          {% for block in section.blocks %}
-            <div class="carousel-card" data-index="{{ forloop.index0 }}">
-              <div class="card-image">
-                {% if block.settings.image != blank %}
-                  <img src="{{ block.settings.image | img_url: '800x' }}" alt="{{ block.settings.title | escape }}">
-                {% else %}
-                  <img src="//placehold.co/800x450" alt="placeholder">
-                {% endif %}
-              </div>
-              <div class="card-body">
-                <p class="card-quote">
-                  {{ block.settings.quote | default: 'The service was absolutely impeccable. I will come back again!' }}
-                </p>
-                <p class="card-title">{{ block.settings.title | default: 'Firstname L.' }}</p>
-                <p class="card-subtitle">{{ block.settings.role | default: 'City, Country' }}</p>
-              </div>
-            </div>
-          {% endfor %}
-        {% endif %}
-      </div>
-    </div>
-
-    <button class="carousel-arrow carousel-arrow-right" aria-label="Next">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-    </button>
-  </div>
-
-  <style>
-    #testimonial-carousel-{{ section.id }} {
-      padding: 60px 0;
-
-      /* CARD SIZE — MATCHES YOUR REFERENCE */
-      --card-width: 320px;
-      --card-height: 500px;
-
-      /* GAP BETWEEN CARDS — WIDER LIKE REFERENCE */
-      --gap: 42px;
-    }
-
-    .testimonial-carousel-section .carousel-inner {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 48px; /* arrow distance from cards */
-      max-width: 1250px;
-      margin: 0 auto;
-      position: relative;
-    }
-
-    /* ARROWS */
-    .carousel-arrow {
-      background: #ffffff;
-      border-radius: 50%;
-      width: 54px;
-      height: 54px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
-      border: none;
-      cursor: pointer;
-      transition: 0.2s ease;
-    }
-
-    .carousel-arrow:hover {
-      transform: scale(1.1);
-    }
-
-    .carousel-arrow svg {
-      color: #111;
-    }
-
-    /* VIEWPORT: 3 cards in view */
-    .carousel-viewport {
-      overflow: hidden;
-      width: calc((var(--card-width) * 3) + (var(--gap) * 2));
-    }
-
-    /* TRACK */
-    .carousel-track {
-      display: flex;
-      align-items: flex-start;
-      gap: var(--gap);
-      transition: transform 420ms cubic-bezier(.25,.9,.2,1);
-      will-change: transform;
-    }
-
-    /* CARD BASE STYLE */
-    .carousel-card {
-      width: var(--card-width);
-      height: var(--card-height);
-      background: #ffffff;
-      border-radius: 26px; /* more rounded like reference */
-      overflow: hidden;
-      box-shadow: 0 8px 18px rgba(0,0,0,0.06);
-      display: flex;
-      flex-direction: column;
-      flex-shrink: 0;
-      transform-origin: center bottom;
-      transition: transform 420ms cubic-bezier(.25,.9,.2,1),
-                  box-shadow 420ms,
-                  border-radius 420ms;
-    }
-
-    /* IMAGE = 60% HEIGHT */
-    .card-image {
-      flex: 0 0 60%;
-      overflow: hidden;
-    }
-
-    .card-image img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    /* CONTENT */
-    .card-body {
-      flex: 1;
-      padding: 20px 24px 26px;
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      gap: 10px;
-    }
-
-    .card-quote {
-      font-size: 15px;
-      line-height: 1.55;
-      color: #222;
-    }
-
-    .card-title {
-      font-size: 15px;
-      font-weight: 700;
-      margin-top: 5px;
-    }
-
-    .card-subtitle {
-      font-size: 13px;
-      color: #777;
-      margin-top: 2px;
-    }
-
-    /* ACTIVE MIDDLE CARD — BIGGER + ROUNDER */
-    .carousel-card.center {
-      transform: scale(1.16);
-      border-radius: 36px; /* MATCHES YOUR REFERENCE */
-      box-shadow: 0 20px 45px rgba(0,0,0,0.12);
-      z-index: 3;
-    }
-
-    /* SIDE CARDS */
-    .carousel-card.side {
-      transform: scale(0.98);
-      opacity: 1;
-      z-index: 2;
-    }
-
-    /* HIDDEN CARDS */
-    .carousel-card.hidden {
-      opacity: 0;
-      pointer-events: none;
-      transform: scale(0.9);
-    }
-
-    /* MOBILE */
-    @media (max-width: 640px) {
-      .carousel-viewport {
-        width: 100%;
-        scroll-snap-type: x mandatory;
-      }
-
-      .carousel-card {
-        scroll-snap-align: center;
-      }
-
-      .carousel-card:focus,
-      .carousel-card:focus-within {
-        transform: scale(1.07);
-        z-index: 10;
-        box-shadow: 0 12px 30px rgba(0,0,0,0.14);
-      }
-    }
-  </style>
-
-  <script>
-    (function () {
-      const root = document.getElementById('testimonial-carousel-{{ section.id }}');
-      if (!root) return;
-
-      const track = root.querySelector('.carousel-track');
-      const cards = Array.from(root.querySelectorAll('.carousel-card'));
-      const leftBtn = root.querySelector('.carousel-arrow-left');
-      const rightBtn = root.querySelector('.carousel-arrow-right');
-
-      const total = cards.length;
-      if (!total) return;
-
-      // leftIndex: left-most visible card index
-      let leftIndex = 0;
-
-      function getGap() {
-        const cs = window.getComputedStyle(track);
-        return parseFloat(cs.gap || '28') || 28;
-      }
-
-      function fullCardWidth() {
-        const first = cards[0];
-        const w = first.getBoundingClientRect().width;
-        return w + getGap();
-      }
-
-      function updateCenterClasses() {
-        const visibleCount = Math.min(3, total);
-        const centerIndex = leftIndex + Math.floor(visibleCount / 2);
-
-        cards.forEach((card, i) => {
-          card.classList.remove('center', 'side');
-          // Don't hide cards completely; we just mark center vs. sides
-          if (i === centerIndex) {
-            card.classList.add('center');
-          } else if (i >= leftIndex && i < leftIndex + visibleCount) {
-            card.classList.add('side');
-          }
-        });
-      }
-
-      function updateTransform(noAnimation) {
-        const full = fullCardWidth();
-        const visibleCount = Math.min(3, total);
-        const maxLeft = Math.max(0, total - visibleCount);
-
-        // clamp leftIndex so we never scroll beyond last full window
-        leftIndex = Math.max(0, Math.min(leftIndex, maxLeft));
-
-        const offset = -(leftIndex * full);
-
-        if (noAnimation) {
-          track.style.transition = 'none';
-        } else {
-          track.style.transition = '';
-        }
-        track.style.transform = 'translateX(' + offset + 'px)';
-
-        if (noAnimation) {
-          void track.offsetHeight; // force reflow
-        }
-
-        updateCenterClasses();
-        updateArrows();
-      }
-
-      function updateArrows() {
-        const visibleCount = Math.min(3, total);
-        const maxLeft = Math.max(0, total - visibleCount);
-
-        if (leftBtn) leftBtn.disabled = leftIndex <= 0;
-        if (rightBtn) rightBtn.disabled = leftIndex >= maxLeft;
-      }
-
-      function goNext() {
-        leftIndex += 1;
-        updateTransform(false);
-      }
-
-      function goPrev() {
-        leftIndex -= 1;
-        updateTransform(false);
-      }
-
-      // Initial state
-      setTimeout(function () {
-        updateTransform(true);
-      }, 30);
-
-      // Events
-      rightBtn && rightBtn.addEventListener('click', goNext);
-      leftBtn && leftBtn.addEventListener('click', goPrev);
-
-      // Keyboard support
-      root.tabIndex = 0;
-      root.addEventListener('keydown', function (e) {
-        if (e.key === 'ArrowRight') goNext();
-        if (e.key === 'ArrowLeft') goPrev();
-      });
-
-      // Basic swipe for mobile
-      let startX = null;
-      let isTouching = false;
-
-      root.addEventListener(
-        'touchstart',
-        function (e) {
-          isTouching = true;
-          startX = e.touches[0].clientX;
-        },
-        { passive: true }
-      );
-
-      root.addEventListener(
-        'touchend',
-        function (e) {
-          if (!isTouching) return;
-          const endX = (e.changedTouches && e.changedTouches[0] && e.changedTouches[0].clientX) || startX;
-          const dx = endX - startX;
-          if (Math.abs(dx) > 30) {
-            if (dx < 0) goNext();
-            else goPrev();
-          }
-          isTouching = false;
-          startX = null;
-        },
-        { passive: true }
-      );
-
-      // Recalculate on resize
-      let resizeTimer;
-      window.addEventListener('resize', function () {
-        clearTimeout(resizeTimer);
-        resizeTimer = setTimeout(function () {
-          updateTransform(true);
-        }, 120);
-      });
-    })();
-  </script>
-
-  {% schema %}
+{% schema %}
 {
-  "name": "Testimonials Carousel",
+  "name": "Testimonials Slider",
   "settings": [],
   "blocks": [
     {
-      "type": "card",
-      "name": "Testimonial card",
+      "type": "testimonial",
+      "name": "Testimonial",
       "settings": [
-        { "type": "image_picker", "id": "image", "label": "Image" },
-        { "type": "text", "id": "title", "label": "Name", "default": "Firstname L." },
-        { "type": "text", "id": "role", "label": "Role / Location", "default": "City, Country" },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
         {
           "type": "textarea",
           "id": "quote",
-          "label": "Quote",
-          "default": "The service was absolutely impeccable. I will come back again!"
+          "label": "Quote"
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Customer Name"
+        },
+        {
+          "type": "text",
+          "id": "role",
+          "label": "Role / Location"
         }
       ]
     }
   ],
-  "max_blocks": 6,
   "presets": [
     {
-      "name": "Testimonials carousel",
-      "category": "Testimonials",
-      "blocks": [
-        {
-          "type": "card",
-          "settings": {
-            "title": "Aleesha.",
-            "role": "Lahore, PK",
-            "quote": "Amazing experience, couldn't recommend more.",
-            "image": ""
-          }
-        },
-        {
-          "type": "card",
-          "settings": {
-            "title": "Rabia.",
-            "role": "Islamabad, PK",
-            "quote": "The service was absolutely amazing. I will come back again!",
-            "image": ""
-          }
-        },
-        {
-          "type": "card",
-          "settings": {
-            "title": "Maria.",
-            "role": "Dubai, UAE",
-            "quote": "Super smooth and professional from start to finish.",
-            "image": ""
-          }
-        },
-        {
-          "type": "card",
-          "settings": {
-            "title": "Eman.",
-            "role": "London, UK",
-            "quote": "Loved everything about the experience.",
-            "image": ""
-          }
-        }
-      ]
+      "name": "Testimonials Slider"
     }
   ]
 }
-  {% endschema %}
+{% endschema %}
+
+<section id="testimonial-section">
+  <div class="testimonial-wrapper">
+    <button class="arrow left">‹</button>
+
+    <div class="testimonial-track">
+      {% for block in section.blocks %}
+      <div class="testimonial-card">
+        <div class="image-box">
+          {% if block.settings.image %}
+            <img src="{{ block.settings.image | img_url: 'medium' }}" alt="">
+          {% endif %}
+        </div>
+
+        <div class="text-box">
+          <p class="quote">{{ block.settings.quote }}</p>
+          <p class="name">{{ block.settings.name }}</p>
+          <p class="role">{{ block.settings.role }}</p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <button class="arrow right">›</button>
+  </div>
 </section>
+
+<style>
+#testimonial-section {
+  padding: 70px 0;
+}
+
+.testimonial-wrapper {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.testimonial-track {
+  display: flex;
+  gap: 35px; /* Perfect card spacing */
+  overflow: hidden;
+  scroll-behavior: smooth;
+  padding: 20px 0;
+  width: 82%; /* Center width alignment */
+}
+
+.testimonial-card {
+  background: white;
+  width: 310px;
+  border-radius: 26px; /* Smooth rounded corners */
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.testimonial-card.active {
+  transform: scale(1.16); /* Medium lift */
+  box-shadow: 0 18px 45px rgba(0,0,0,0.14);
+}
+
+.image-box {
+  height: 200px; /* 60% of card height */
+  overflow: hidden;
+}
+
+.image-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.text-box {
+  padding: 25px 20px;
+  text-align: center;
+}
+
+.quote {
+  font-size: 15px;
+  line-height: 1.5;
+  margin-bottom: 18px;
+}
+
+.name {
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.role {
+  font-size: 12px;
+  opacity: 0.6;
+}
+
+/* Arrows */
+.arrow {
+  position: absolute;
+  background: white;
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  border: none;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.12);
+  cursor: pointer;
+  font-size: 22px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+}
+
+.arrow.left { left: 40px; }
+.arrow.right { right: 40px; }
+
+.arrow:hover {
+  transform: translateY(-50%) scale(1.1);
+}
+</style>
+
+<script>
+const track = document.querySelector('.testimonial-track');
+const cards = document.querySelectorAll('.testimonial-card');
+const left = document.querySelector('.arrow.left');
+const right = document.querySelector('.arrow.right');
+
+let index = 1;
+
+function activateCard() {
+  cards.forEach(c => c.classList.remove('active'));
+  cards[index]?.classList.add('active');
+  track.scrollTo({
+    left: cards[index].offsetLeft - track.offsetWidth / 2 + cards[index].offsetWidth / 2,
+    behavior: "smooth"
+  });
+}
+
+activateCard();
+
+right.onclick = () => {
+  index = (index + 1) % cards.length;
+  activateCard();
+};
+
+left.onclick = () => {
+  index = (index - 1 + cards.length) % cards.length;
+  activateCard();
+};
+</script>
