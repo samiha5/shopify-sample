@@ -1,298 +1,197 @@
-{% comment %}
-  Updated Testimonial Carousel
-  - 3-up layout
-  - Center card highlighted (medium lift)
-  - Image ratio 60% of card height
-{% endcomment %}
-
-<section
-  id="testimonial-carousel-{{ section.id }}"
-  class="testimonial-carousel-section"
-  data-section-id="{{ section.id }}"
->
-  <div class="carousel-inner">
-
-    <!-- LEFT ARROW -->
-    <button class="carousel-arrow carousel-arrow-left" aria-label="Previous">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <path d="M15 18l-6-6 6-6"
-              stroke="currentColor" stroke-width="2"
-              stroke-linecap="round" stroke-linejoin="round" />
-      </svg>
-    </button>
-
-    <div class="carousel-viewport">
-      <div class="carousel-track">
-
-        {% if section.blocks.size == 0 %}
-          {% for i in (1..6) %}
-            <div class="carousel-card">
-              <div class="card-image">
-                <img src="//placehold.co/800x500" alt="placeholder">
-              </div>
-              <div class="card-body">
-                <p class="card-quote">Default testimonial text.</p>
-                <p class="card-title">Firstname L.</p>
-                <p class="card-subtitle">City, Country</p>
-              </div>
-            </div>
-          {% endfor %}
-        {% else %}
-          {% for block in section.blocks %}
-            <div class="carousel-card">
-              <div class="card-image">
-                {% if block.settings.image %}
-                  <img src="{{ block.settings.image | img_url: '800x' }}" alt="{{ block.settings.title }}">
-                {% else %}
-                  <img src="//placehold.co/800x500" alt="placeholder">
-                {% endif %}
-              </div>
-
-              <div class="card-body">
-                <p class="card-quote">{{ block.settings.quote }}</p>
-                <p class="card-title">{{ block.settings.title }}</p>
-                <p class="card-subtitle">{{ block.settings.role }}</p>
-              </div>
-            </div>
-          {% endfor %}
-        {% endif %}
-
-      </div>
-    </div>
-
-    <!-- RIGHT ARROW -->
-    <button class="carousel-arrow carousel-arrow-right" aria-label="Next">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <path d="M9 6l6 6-6 6"
-              stroke="currentColor" stroke-width="2"
-              stroke-linecap="round" stroke-linejoin="round" />
-      </svg>
-    </button>
-
-  </div>
-
-<style>
-/* Outer Section */
-#testimonial-carousel-{{ section.id }} {
-  padding: 60px 0;
-  --card-width: 300px;
-  --card-height: 460px;
-  --gap: 40px; /* wider spacing like your reference */
-}
-
-/* Layout */
-.carousel-inner {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  gap: 60px; /* pushes arrows out */
-  max-width: 1280px;
-  margin: auto;
-}
-
-/* Arrows */
-.carousel-arrow {
-  width: 54px;
-  height: 54px;
-  border-radius: 50%;
-  background: #fff;
-  border: none;
-  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.10);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-}
-
-.carousel-arrow svg {
-  stroke: #000;
-}
-
-.carousel-arrow[disabled] {
-  opacity: 0.25;
-}
-
-/* Viewport */
-.carousel-viewport {
-  overflow: hidden;
-  width: calc(var(--card-width) * 3 + var(--gap) * 2);
-}
-
-/* Track */
-.carousel-track {
-  display: flex;
-  gap: var(--gap);
-  transition: transform 400ms cubic-bezier(.25, .85, .25, 1);
-}
-
-/* Card */
-.carousel-card {
-  width: var(--card-width);
-  height: var(--card-height);
-  background: #ffffff;
-  border-radius: 20px;
-  overflow: hidden;
-  flex-shrink: 0;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
-  transition: transform 0.45s ease, box-shadow 0.45s ease;
-}
-
-/* 60% image ratio */
-.card-image {
-  height: 60%;
-  overflow: hidden;
-  background: #eee;
-}
-
-.card-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-/* Text */
-.card-body {
-  height: 40%;
-  padding: 20px 28px;
-  text-align: center;
-}
-
-.card-quote {
-  font-size: 14px;
-  margin-bottom: 10px;
-  color: #222;
-}
-
-.card-title {
-  font-size: 15px;
-  font-weight: 700;
-  margin: 0;
-}
-
-.card-subtitle {
-  font-size: 13px;
-  color: #777;
-  margin-top: 4px;
-}
-
-/* CENTER CARD LIFT - medium */
-.carousel-card.center {
-  transform: scale(1.16);
-  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.18);
-  z-index: 3;
-}
-
-.carousel-card.side {
-  opacity: 0.92;
-  transform: scale(0.98);
-  z-index: 1;
-}
-
-/* Mobile */
-@media (max-width: 640px) {
-  #testimonial-carousel-{{ section.id }} {
-    --card-width: 80vw;
-    --card-height: 420px;
-    --gap: 20px;
-  }
-  .carousel-inner {
-    gap: 20px;
-  }
-  .carousel-viewport {
-    width: 100%;
-  }
-}
-</style>
-
-<script>
-(function () {
-  const root = document.getElementById("testimonial-carousel-{{ section.id }}");
-  if (!root) return;
-
-  const track = root.querySelector(".carousel-track");
-  const cards = Array.from(root.querySelectorAll(".carousel-card"));
-  const leftBtn = root.querySelector(".carousel-arrow-left");
-  const rightBtn = root.querySelector(".carousel-arrow-right");
-
-  let leftIndex = 0;
-  const total = cards.length;
-
-  function getGap() {
-    return parseFloat(window.getComputedStyle(track).gap);
-  }
-
-  function fullCardWidth() {
-    return cards[0].getBoundingClientRect().width + getGap();
-  }
-
-  function updateCenter() {
-    const visible = Math.min(3, total);
-    const center = leftIndex + Math.floor(visible / 2);
-
-    cards.forEach((card, i) => {
-      card.classList.remove("center", "side");
-      if (i === center) {
-        card.classList.add("center");
-      } else if (i >= leftIndex && i < leftIndex + visible) {
-        card.classList.add("side");
-      }
-    });
-  }
-
-  function update() {
-    const full = fullCardWidth();
-    const visibleCount = Math.min(3, total);
-    const maxLeft = Math.max(0, total - visibleCount);
-
-    leftIndex = Math.max(0, Math.min(leftIndex, maxLeft));
-    track.style.transform = `translateX(${-leftIndex * full}px)`;
-
-    if (leftBtn) leftBtn.disabled = leftIndex === 0;
-    if (rightBtn) rightBtn.disabled = leftIndex >= maxLeft;
-
-    updateCenter();
-  }
-
-  leftBtn.addEventListener("click", () => {
-    leftIndex--;
-    update();
-  });
-
-  rightBtn.addEventListener("click", () => {
-    leftIndex++;
-    update();
-  });
-
-  setTimeout(() => update(), 30);
-
-  window.addEventListener("resize", () => setTimeout(update, 150));
-})();
-</script>
-
 {% schema %}
 {
   "name": "Testimonials Carousel",
-  "settings": [],
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "bg_image",
+      "label": "Background Image"
+    }
+  ],
   "blocks": [
     {
-      "type": "card",
-      "name": "Testimonial Card",
+      "type": "testimonial",
+      "name": "Testimonial",
       "settings": [
-        { "type": "image_picker", "id": "image", "label": "Image" },
-        { "type": "text", "id": "title", "label": "Name" },
-        { "type": "text", "id": "role", "label": "Role / Location" },
-        { "type": "textarea", "id": "quote", "label": "Quote" }
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Testimonial Image"
+        },
+        {
+          "type": "textarea",
+          "id": "review",
+          "label": "Review Text"
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Customer Name"
+        },
+        {
+          "type": "text",
+          "id": "location",
+          "label": "Location"
+        }
       ]
     }
   ],
-  "max_blocks": 12,
   "presets": [
     {
-      "name": "Testimonials Carousel",
-      "category": "Testimonials"
+      "name": "Testimonials Carousel"
     }
   ]
 }
 {% endschema %}
+
+<section class="testimonials-carousel" 
+  {% if section.settings.bg_image != blank %} 
+    style="background-image:url('{{ section.settings.bg_image | img_url: '2000x' }}');" 
+  {% endif %}>
+  
+  <div class="carousel-wrapper">
+    <button class="nav prev">&#10094;</button>
+
+    <div class="cards-container">
+      {% for block in section.blocks %}
+      <div class="testimonial-card">
+        <div class="card-image">
+          <img src="{{ block.settings.image | img_url: '800x' }}" alt="">
+        </div>
+        <div class="card-content">
+          <p class="review">{{ block.settings.review }}</p>
+          <p class="name">{{ block.settings.name }}</p>
+          <p class="location">{{ block.settings.location }}</p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <button class="nav next">&#10095;</button>
+  </div>
 </section>
+
+<style>
+.testimonials-carousel {
+  padding: 70px 0;
+  background-size: cover;
+  background-position: center;
+}
+
+.carousel-wrapper {
+  position: relative;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.cards-container {
+  display: flex;
+  gap: 45px;
+  justify-content: center;
+  align-items: center;
+  transition: transform 0.4s ease-in-out;
+}
+
+.testimonial-card {
+  width: 320px;
+  height: 500px;
+  background: #fff;
+  border-radius: 22px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  transition: 0.3s ease;
+}
+
+/* Center Active Card */
+.testimonial-card.active {
+  transform: scale(1.16);
+  border-radius: 32px;
+  box-shadow: 0 18px 35px rgba(0,0,0,0.15);
+}
+
+/* Image at 60% height (Option A) */
+.card-image {
+  height: 60%;
+  width: 100%;
+}
+
+.card-image img {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+}
+
+.card-content {
+  text-align: center;
+  padding: 18px 20px;
+}
+
+.review {
+  font-size: 15px;
+  color: #333;
+  margin-bottom: 12px;
+}
+
+.name {
+  margin-top: 5px;
+  font-weight: 700;
+  color: #000;
+}
+
+.location {
+  font-size: 14px;
+  color: #777;
+}
+
+/* Arrows */
+.nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: white;
+  border: none;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  font-size: 20px;
+  cursor: pointer;
+  box-shadow: 0 5px 12px rgba(0,0,0,0.15);
+  transition: 0.3s;
+}
+
+.nav:hover {
+  transform: translateY(-50%) scale(1.1);
+}
+
+.prev {
+  left: -70px;
+}
+
+.next {
+  right: -70px;
+}
+</style>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const cards = document.querySelectorAll(".testimonial-card");
+  let activeIndex = 1; // center card
+
+  function updateActiveCard() {
+    cards.forEach(c => c.classList.remove("active"));
+    if (cards[activeIndex]) cards[activeIndex].classList.add("active");
+  }
+
+  updateActiveCard();
+
+  document.querySelector(".next").addEventListener("click", () => {
+    activeIndex = (activeIndex + 1) % cards.length;
+    updateActiveCard();
+  });
+
+  document.querySelector(".prev").addEventListener("click", () => {
+    activeIndex = (activeIndex - 1 + cards.length) % cards.length;
+    updateActiveCard();
+  });
+});
+</script>
